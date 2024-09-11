@@ -1,6 +1,12 @@
 #define HL_NAME(n) dx12_##n
 #include <hl.h>
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 #ifdef HL_WIN_DESKTOP
 #include <dxgi.h>
 #include <dxgi1_5.h>
@@ -63,7 +69,7 @@ static void ReportDxError( HRESULT err, int line ) {
 	hl_error("DXERROR %X line %d",(DWORD)err,line);
 }
 
-static void OnDebugMessage( 
+static void OnDebugMessage(
 D3D12_MESSAGE_CATEGORY Category,
 D3D12_MESSAGE_SEVERITY Severity,
 D3D12_MESSAGE_ID ID,
@@ -742,7 +748,7 @@ HL_PRIM int HL_NAME(get_descriptor_handle_increment_size)( D3D12_DESCRIPTOR_HEAP
 
 HL_PRIM int64 HL_NAME(descriptor_heap_get_handle)( ID3D12DescriptorHeap *heap, bool gpu ) {
 	UINT64 handle = gpu ? heap->GetGPUDescriptorHandleForHeapStart().ptr : heap->GetCPUDescriptorHandleForHeapStart().ptr;
-	return handle; 
+	return handle;
 }
 
 HL_PRIM ID3D12QueryHeap *HL_NAME(create_query_heap)( D3D12_QUERY_HEAP_DESC *desc ) {

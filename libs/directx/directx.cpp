@@ -1,6 +1,12 @@
 #define HL_NAME(n) directx_##n
 #include <hl.h>
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 #ifdef HL_WIN_DESKTOP
 #include <dxgi.h>
 #include <d3dcommon.h>
