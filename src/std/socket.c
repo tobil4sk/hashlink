@@ -25,7 +25,6 @@
 #pragma warning(disable:4548)
 
 #	include <string.h>
-#	define _WINSOCKAPI_
 #	include <hl.h>
 #	include <winsock2.h>
 #	define FDSIZE(n)	(sizeof(void*) + (n) * sizeof(SOCKET))
