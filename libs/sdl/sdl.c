@@ -3,6 +3,12 @@
 #include <hl.h>
 #include <locale.h>
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 #if defined(_WIN32) || defined(__ANDROID__) || defined(HL_IOS) || defined(HL_TVOS)
 #	include <SDL.h>
 #	include <SDL_vulkan.h>
@@ -523,7 +529,7 @@ HL_PRIM SDL_Window *HL_NAME(win_create_ex)(int x, int y, int width, int height, 
 	// force window to match device resolution on mobile
 	if ((sdlFlags & (
 #ifdef HL_MAC
-		SDL_WINDOW_METAL | 
+		SDL_WINDOW_METAL |
 #endif
 		SDL_WINDOW_VULKAN )) == 0) {
 		sdlFlags |= SDL_WINDOW_OPENGL;

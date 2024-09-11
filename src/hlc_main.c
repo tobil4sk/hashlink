@@ -25,6 +25,10 @@
 #   include <SDL_main.h>
 #endif
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#endif
+
 #ifdef HL_WIN_DESKTOP
 # ifndef CONST
 #	define CONST

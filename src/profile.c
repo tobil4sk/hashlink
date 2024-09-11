@@ -50,6 +50,12 @@
 #endif
 #endif
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 #define MAX_STACK_SIZE (8 << 20)
 #define MAX_STACK_COUNT 2048
 
