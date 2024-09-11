@@ -21,6 +21,10 @@
  */
 #include <hl.h>
 
+#if defined(HL_WIN) && !defined(HL_XBO)
+#	include <windows.h>
+#endif
+
 HL_PRIM hl_type hlt_array = { HARRAY };
 HL_PRIM hl_type hlt_bytes = { HBYTES };
 HL_PRIM hl_type hlt_dynobj = { HDYNOBJ };

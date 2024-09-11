@@ -34,6 +34,11 @@
 #endif
 
 #if defined(HL_WIN)
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#else
+#	include <xdk.h>
+#endif
 static HANDLE last_process = NULL, last_thread = NULL;
 static int last_pid = -1;
 static int last_tid = -1;

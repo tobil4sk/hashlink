@@ -22,6 +22,12 @@
 
 #include <hl.h>
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 typedef struct _hl_semaphore hl_semaphore;
 typedef struct _hl_condition hl_condition;
 

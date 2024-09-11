@@ -27,6 +27,12 @@
 #include <posix/posix.h>
 #endif
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 HL_PRIM void *hl_fatal_error( const char *msg, const char *file, int line ) {
 	hl_blocking(true);
 #	ifdef HL_WIN_DESKTOP
@@ -118,7 +124,7 @@ HL_PRIM void hl_null_access() {
 }
 
 HL_PRIM void hl_throw_buffer( hl_buffer *b ) {
-	vdynamic *d = hl_alloc_dynamic(&hlt_bytes);	
+	vdynamic *d = hl_alloc_dynamic(&hlt_bytes);
 	d->v.ptr = hl_buffer_content(b,NULL);
 	hl_throw(d);
 }

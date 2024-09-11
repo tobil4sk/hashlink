@@ -21,6 +21,10 @@
  */
 #include <hl.h>
 
+#if defined(HL_VCC) && !defined(HL_XBO)
+#include <windows.h>
+#endif
+
 HL_PRIM int hl_closure_stack_capture = 0;
 
 static void fun_var_args() {

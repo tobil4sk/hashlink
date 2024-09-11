@@ -21,6 +21,12 @@
  */
 #include <hl.h>
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif XBO
+#	include <xdk.h>
+#endif
+
 #if defined(HL_CONSOLE)
 #	include <posix/posix.h>
 #elif !defined(HL_WIN)
