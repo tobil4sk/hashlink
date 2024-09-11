@@ -1,6 +1,12 @@
 #define HL_NAME(n) directx_##n
 #include <hl.h>
 
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
+
 #define MAX_EVENTS 1024
 
 typedef enum {
@@ -138,14 +144,14 @@ static bool setRelativeMode( HWND wnd, bool enabled ) {
 	RAWINPUTDEVICE mouse = { 0x01, 0x02, 0, NULL }; /* Mouse: UsagePage = 1, Usage = 2 */
 
 	if ( relative_mouse == enabled ) return true;
-	
+
 	if ( !enabled ) {
 		mouse.dwFlags |= RIDEV_REMOVE;
 		if ( show_cursor ) SetCursor(cur_cursor);
 	} else {
 		SetCursor(NULL);
 	}
-	
+
 	relative_mouse = enabled;
 	updateClipCursor(wnd);
 
@@ -203,8 +209,8 @@ static LRESULT CALLBACK WndProc( HWND wnd, UINT umsg, WPARAM wparam, LPARAM lpar
 	case WM_SYSCOMMAND:
 		if( wparam == SC_KEYMENU && (lparam>>16) <= 0 )
 			return 0;
-		break;	
-	case WM_MOUSEMOVE: 
+		break;
+	case WM_MOUSEMOVE:
 		{
 			dx_events *evt = get_events(wnd);
 			if( !evt->is_over ) {
@@ -229,11 +235,11 @@ static LRESULT CALLBACK WndProc( HWND wnd, UINT umsg, WPARAM wparam, LPARAM lpar
 				RAWINPUT inp;
 				UINT size = sizeof(inp);
 				GetRawInputData(hRawInput, RID_INPUT, &inp, &size, sizeof(RAWINPUTHEADER));
-				
+
 				// Ignore pseudo-movement from touch events.
 				if ( inp.header.dwType == RIM_TYPEMOUSE ) {
 					RAWMOUSE* mouse = &inp.data.mouse;
-					
+
 					if ( (mouse->usFlags & 0x01) == MOUSE_MOVE_RELATIVE ) {
 						if ( mouse->lLastX != 0 || mouse->lLastY != 0 ) {
 							e = addEvent(wnd, MouseMove);
@@ -243,12 +249,12 @@ static LRESULT CALLBACK WndProc( HWND wnd, UINT umsg, WPARAM wparam, LPARAM lpar
 							e->mouseXRel = mouse->lLastX;
 							e->mouseYRel = mouse->lLastY;
 						}
-						
+
 					} else if ( mouse->lLastX || mouse->lLastY ) {
 						// Absolute movement - simulate relative movement
-						
+
 						static POINT lastMousePos;
-						
+
 						bool virtual_desktop = mouse->usFlags & MOUSE_VIRTUAL_DESKTOP;
 						int w = GetSystemMetrics(virtual_desktop ? SM_CXVIRTUALSCREEN : SM_CXSCREEN);
 						int h = GetSystemMetrics(virtual_desktop ? SM_CYVIRTUALSCREEN : SM_CYSCREEN);
@@ -268,7 +274,7 @@ static LRESULT CALLBACK WndProc( HWND wnd, UINT umsg, WPARAM wparam, LPARAM lpar
 							lastMousePos.x = x;
 							lastMousePos.y = y;
 						}
-						
+
 					}
 				}
 			}
@@ -291,7 +297,7 @@ static LRESULT CALLBACK WndProc( HWND wnd, UINT umsg, WPARAM wparam, LPARAM lpar
 			}
 		}
 		bool repeat = (umsg == WM_KEYDOWN || umsg == WM_SYSKEYDOWN) && (lparam & 0x40000000) != 0;
-		// see 
+		// see
 		e = addEvent(wnd,(umsg == WM_KEYUP || umsg == WM_SYSKEYUP) ? KeyUp : KeyDown);
 		e->keyCode = (int)wparam;
 		e->scanCode = (lparam >> 16) & 0xFF;
@@ -318,7 +324,7 @@ static LRESULT CALLBACK WndProc( HWND wnd, UINT umsg, WPARAM wparam, LPARAM lpar
 			shift_downs[0] = false;
 			e = addEvent(wnd,KeyUp);
 			e->keyCode = VK_SHIFT | 256;
-		}			
+		}
 		if( shift_downs[1] && GetKeyState(VK_RSHIFT) >= 0 ) {
 			//printf("RSHIFT RELEASED\n");
 			shift_downs[1] = false;

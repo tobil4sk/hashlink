@@ -13,6 +13,11 @@
 #	define glDispatchCompute(...) hl_error("Not supported on OSX")
 #	define glMemoryBarrier(...) hl_error("Not supported on OSX")
 #elif defined(_WIN32)
+#if defined(HL_WIN_DESKTOP) || defined(HL_XBS)
+#	include <windows.h>
+#elif HL_XBO
+#	include <xdk.h>
+#endif
 #	include <SDL.h>
 #	include <GL/GLU.h>
 #	include <glext.h>
