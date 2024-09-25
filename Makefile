@@ -20,7 +20,10 @@ LIBTURBOJPEG = -lturbojpeg
 
 LHL_LINK_FLAGS =
 
-PCRE_FLAGS = -I include/pcre -D HAVE_CONFIG_H -D PCRE2_CODE_UNIT_WIDTH=16 -D PCRE2_STATIC
+PCRE_CPPFLAGS = -D PCRE2_CODE_UNIT_WIDTH=16
+
+ifdef PCRE_STATIC
+PCRE_CPPFLAGS += -D HAVE_CONFIG_H -D PCRE2_STATIC -I include/pcre
 
 PCRE = include/pcre/pcre2_auto_possess.o include/pcre/pcre2_chartables.o include/pcre/pcre2_compile.o \
 	include/pcre/pcre2_config.o include/pcre/pcre2_context.o include/pcre/pcre2_convert.o \
@@ -31,6 +34,9 @@ PCRE = include/pcre/pcre2_auto_possess.o include/pcre/pcre2_chartables.o include
 	include/pcre/pcre2_serialize.o include/pcre/pcre2_string_utils.o include/pcre/pcre2_study.o \
 	include/pcre/pcre2_substitute.o include/pcre/pcre2_substring.o include/pcre/pcre2_tables.o \
 	include/pcre/pcre2_ucd.o include/pcre/pcre2_valid_utf.o include/pcre/pcre2_xclass.o
+else
+LIBHL_LDLIBS = -lpcre2-16
+endif
 
 RUNTIME = src/gc.o
 
@@ -195,13 +201,13 @@ uninstall:
 libs: $(LIBS)
 
 ./include/pcre/%.o: include/pcre/%.c
-	${CC} ${CFLAGS} -o $@ -c $< ${PCRE_FLAGS}
+	${CC} ${CFLAGS} ${PCRE_CPPFLAGS} -o $@ -c $<
 
 src/std/regexp.o: src/std/regexp.c
-	${CC} ${CFLAGS} -o $@ -c $< ${PCRE_FLAGS}
+	${CC} ${CFLAGS} ${PCRE_CPPFLAGS} -o $@ -c $<
 
 libhl: ${LIB}
-	${CC} ${CFLAGS} -o libhl.$(LIBEXT) -m${MARCH} ${LIBFLAGS} ${LHL_LINK_FLAGS} -shared ${LIB} -lpthread -lm
+	${CC} -o libhl.$(LIBEXT) -m${MARCH} ${LIBFLAGS} ${LHL_LINK_FLAGS} -shared $^ -lpthread -lm ${LIBHL_LDLIBS}
 
 hlc: ${BOOT}
 	${CC} ${CFLAGS} -o hlc ${BOOT} ${LFLAGS} ${EXTRA_LFLAGS}
