@@ -109,12 +109,17 @@ BREW_LIBPNG := $(shell brew --prefix libpng)
 BREW_LIBOGG := $(shell brew --prefix libogg)
 BREW_LIBUV := $(shell brew --prefix libuv)
 
+ifndef PCRE_STATIC
+BREW_PCRE := $(shell brew --prefix pcre2)
+PCRE_CPPFLAGS += -I $(BREW_PCRE)/include
+endif
+
 CFLAGS += -m$(MARCH) -I include -I $(BREW_LIBJPEG)/include \
 	-I $(BREW_JPEGTURBO)/include -I $(BREW_SDL2)/include -I $(BREW_VORBIS)/include \
 	-I $(BREW_MBEDTLS)/include -I $(BREW_LIBPNG)/include -I $(BREW_LIBOGG)/include \
 	-I $(BREW_LIBUV)/include \
 	-I $(BREW_OPENAL)/include -Dopenal_soft  -DGL_SILENCE_DEPRECATION
-LFLAGS += -Wl,-export_dynamic 
+LFLAGS += -Wl,-export_dynamic
 
 CFLAGS += -m$(MARCH) -I include -I /usr/local/include -I /usr/local/opt/libjpeg-turbo/include \
 	-I /usr/local/opt/jpeg-turbo/include -I /usr/local/opt/sdl2/include -I /usr/local/opt/libvorbis/include \
