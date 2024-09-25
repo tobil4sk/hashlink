@@ -207,7 +207,7 @@ src/std/regexp.o: src/std/regexp.c
 	${CC} ${CFLAGS} ${PCRE_CPPFLAGS} -o $@ -c $<
 
 libhl: ${LIB}
-	${CC} -o libhl.$(LIBEXT) -m${MARCH} ${LIBFLAGS} ${LHL_LINK_FLAGS} -shared $^ -lpthread -lm ${LIBHL_LDLIBS}
+	${CC} -o libhl.$(LIBEXT) ${LIBFLAGS} ${LHL_LINK_FLAGS} -shared $^ -lpthread -lm ${LIBHL_LDLIBS}
 
 hlc: ${BOOT}
 	${CC} ${CFLAGS} -o hlc ${BOOT} ${LFLAGS} ${EXTRA_LFLAGS}
