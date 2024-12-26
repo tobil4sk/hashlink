@@ -120,7 +120,6 @@ jobs:
             sudo apt-get update -y
             sudo apt-get install --no-install-recommends -y \
               gcc-multilib \
-              libalut-dev:i386 \
               libmbedtls-dev:i386 \
               libopenal-dev:i386 \
               libpng-dev:i386 \
