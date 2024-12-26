@@ -75,9 +75,6 @@ jobs:
           - target: darwin
             build_system: vs2019
 
-          - target: linux
-            architecture: 32
-
           - target: darwin
             architecture: 32
 
@@ -117,6 +114,25 @@ jobs:
         set -eux
 
         case "${{ matrix.target }}${{ matrix.architecture }}" in
+        linux32)
+            echo "MARCH=32" >> $GITHUB_ENV
+            sudo dpkg --add-architecture i386
+            sudo apt-get update -y
+            sudo apt-get install --no-install-recommends -y \
+              gcc-multilib \
+              libalut-dev:i386 \
+              libmbedtls-dev:i386 \
+              libopenal-dev:i386 \
+              libpng-dev:i386 \
+              libsdl2-dev:i386 \
+              libturbojpeg0-dev:i386 \
+              libuv1-dev:i386 \
+              libvorbis-dev:i386 \
+              libz-dev:i386 \
+              zlib1g-dev:i386 \
+              libsqlite3-dev:i386
+            ;;
+
           linux64)
             echo "MARCH=64" >> $GITHUB_ENV
             sudo apt-get update -y
@@ -167,6 +183,8 @@ jobs:
         case "${{ matrix.build_system }}" in
           cmake)
             case "${{ matrix.target }}${{ matrix.architecture }}" in
+              linux32)
+                cmake . -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} -DCMAKE_TOOLCHAIN_FILE=other/cmake/linux32.toolchain.cmake ;;
               windows*)
                 cmake . -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} \
                   -G "${{ matrix.cmake_generator }}" \
@@ -249,6 +267,7 @@ jobs:
           darwinarm64)   platform_name=darwin-arm64 ;;
           darwin64)   platform_name=darwin ;;
           windows*)  platform_name=win${{matrix.architecture}} ;;
+          linux32)   platform_name=linux-i386 ;;
           linux64)   platform_name=linux-amd64 ;;
         esac
 
@@ -316,6 +335,8 @@ jobs:
           --title "HashLink Nightly Build" \
           "darwin-make-64/hashlink-${short_commit}-darwin.tar.gz#hashlink-latest-darwin.tar.gz" \
           "darwin-make-arm64/hashlink-${short_commit}-darwin-arm64.tar.gz#hashlink-latest-darwin-arm64.tar.gz" \
+
+          "linux-make-32/hashlink-${short_commit}-linux-i386.tar.gz#hashlink-latest-linux-i386.tar.gz" \
           "linux-make-64/hashlink-${short_commit}-linux-amd64.tar.gz#hashlink-latest-linux-amd64.tar.gz" \
           "windows-vs2019-32/hashlink-${short_commit}-win32.zip#hashlink-latest-win32.zip" \
           "windows-vs2019-64/hashlink-${short_commit}-win64.zip#hashlink-latest-win64.zip"
