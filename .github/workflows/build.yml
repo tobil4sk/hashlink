@@ -118,6 +118,7 @@ jobs:
             echo "MARCH=32" >> $GITHUB_ENV
             sudo dpkg --add-architecture i386
             sudo apt-get update -y
+            sudo apt-get upgrade
             sudo apt-get -f install
             sudo apt-get -f install -y \
               gcc-multilib \
