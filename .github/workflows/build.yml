@@ -118,18 +118,12 @@ jobs:
             echo "MARCH=32" >> $GITHUB_ENV
             sudo dpkg --add-architecture i386
             sudo apt-get update -y
-            sudo apt-get install --no-install-recommends -y \
+            sudo apt-get install --no-install-recommends -y -f \
               gcc-multilib \
               libmbedtls-dev:i386 \
               libopenal-dev:i386 \
               libpng-dev:i386 \
               libsdl2-dev:i386 \
-              libibus-1.0-dev:i386 \
-              gir1.2-ibus-1.0:i386 \
-              libglib2.0-dev:i386 \
-              ibibus-1.0-5:i386 \
-              libpulse-dev:i386 \
-              libpulse-mainloop-glib0:i386 \
               libturbojpeg0-dev:i386 \
               libuv1-dev:i386 \
               libvorbis-dev:i386 \
