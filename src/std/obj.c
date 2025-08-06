@@ -21,6 +21,7 @@
  */
 #include "hl.h"
 #include <string.h>
+#include <stdlib.h>
 
 HL_PRIM hl_field_lookup *hl_lookup_insert( hl_field_lookup *l, int size, int hash, hl_type *t, int index ) {
 	int min = 0;
@@ -1345,4 +1346,3 @@ DEFINE_PRIM(_DYN, obj_copy, _DYN);
 DEFINE_PRIM(_DYN, get_virtual_value, _DYN);
 DEFINE_PRIM(_I32, hash, _BYTES);
 DEFINE_PRIM(_BYTES, field_name, _I32);
-

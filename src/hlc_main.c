@@ -25,6 +25,10 @@
 #   include <SDL_main.h>
 #endif
 
+#ifdef HL_WIN
+#include <stdlib.h>
+#endif
+
 #ifdef HL_WIN_DESKTOP
 #	pragma warning(disable:4091)
 # undef _GUID

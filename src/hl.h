@@ -210,9 +210,6 @@ typedef long long int64;
 typedef unsigned long long uint64;
 
 #include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <memory.h>
 
 #if defined(LIBHL_EXPORTS)
 #define HL_API extern EXPORT

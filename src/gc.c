@@ -20,6 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "hl.h"
+
+#include <stdio.h>
 #ifdef HL_WIN
 #	undef _GUID
 #	include <windows.h>

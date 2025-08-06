@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include <hl.h>
+#include <stdio.h>
 
 #ifdef HL_64
 #	define PAD_64_VAL	,0

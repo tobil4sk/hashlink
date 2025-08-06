@@ -1,6 +1,7 @@
 #define HL_NAME(n) dx12_##n
 #include <hl.h>
 #undef _GUID
+#include <stdio.h>
 
 #ifdef HL_WIN_DESKTOP
 #include <dxgi.h>

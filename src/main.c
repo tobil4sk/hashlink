@@ -23,6 +23,7 @@
 #include <hlmodule.h>
 #include "hlsystem.h"
 
+#include <stdio.h>
 #ifdef HL_WIN
 #	include <locale.h>
 typedef uchar pchar;
@@ -255,4 +256,3 @@ int main(int argc, pchar *argv[]) {
 	hl_global_free();
 	return 0;
 }
-

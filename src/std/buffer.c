@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <hl.h>
+#include <stdlib.h>
 
 #ifdef PRId64
 #	define PR_I64 USTR("%" PRId64)

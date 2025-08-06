@@ -26,6 +26,8 @@
 #include <hlmodule.h>
 #include "hlsystem.h"
 
+#include <stdio.h>
+
 #ifdef __arm__
 #	error "JIT does not support ARM processors, only x86 and x86-64 are supported, please use HashLink/C native compilation instead"
 #endif
@@ -4642,4 +4644,3 @@ void *hl_jit_code( jit_ctx *ctx, hl_module *m, int *codesize, hl_debug_infos **d
 	}
 	return code;
 }
-

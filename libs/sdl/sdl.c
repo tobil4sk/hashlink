@@ -4,6 +4,7 @@
 #include "hlsystem.h"
 
 #include <locale.h>
+#include <stdio.h>
 
 #if defined(_WIN32) || defined(__ANDROID__) || defined(HL_IOS) || defined(HL_TVOS)
 #	include <SDL.h>
