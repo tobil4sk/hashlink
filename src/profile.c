@@ -22,6 +22,9 @@
 #include <hl.h>
 #include <hlmodule.h>
 #include "hlsystem.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #ifdef HL_LINUX
 #include <semaphore.h>
@@ -38,7 +41,6 @@
 #include <objc/runtime.h>
 #include <dispatch/dispatch.h>
 #include <execinfo.h>
-#include <stdio.h>
 #include <stdlib.h>
 #endif
 

@@ -74,6 +74,8 @@ extern void sys_global_exit();
 
 #if defined(HL_LINUX_BACKTRACE) || defined(HL_MAC)
 #	include <execinfo.h>
+#	include <stdlib.h>
+#	include <string.h>
 #endif
 
 static uchar *hlc_resolve_symbol( void *addr, uchar *out, int *outSize ) {

@@ -1,6 +1,7 @@
 #define HL_NAME(n) sqlite_##n
 
 #include <hl.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sqlite3.h>
 

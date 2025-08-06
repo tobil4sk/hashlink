@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <hl.h>
+#include <string.h>
 
 HL_PRIM varray *hl_alloc_array( hl_type *at, int size ) {
 	if( size == 0 && at->kind == HDYN ) {

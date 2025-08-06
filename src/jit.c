@@ -22,6 +22,10 @@
 #include <jit.h>
 #include "data_struct.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 static jit_ctx *current_ctx = NULL;
 
 int hl_jit_trampoline = -1;
@@ -368,7 +372,10 @@ void *hl_jit_code( jit_ctx *ctx, hl_module *m, int *codesize, hl_debug_infos **d
 	hl_setup.static_call = callback_c2hl;
 	return code;
 }
+<<<<<<< HEAD
 
 void hl_jit_patch_method( void*fun, void**newt ) {
 	jit_assert();
 }
+=======
+>>>>>>> 8a2639d3 (Clean up headers in hl.h)

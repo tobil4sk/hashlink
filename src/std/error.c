@@ -24,6 +24,8 @@
 
 #include <stdarg.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef HL_CONSOLE
 #include <posix/posix.h>

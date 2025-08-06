@@ -21,6 +21,9 @@
  */
 #include <hl.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifdef HL_CONSOLE
 #	include <posix/posix.h>

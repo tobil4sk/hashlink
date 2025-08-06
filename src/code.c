@@ -21,6 +21,10 @@
  */
 #include "hlmodule.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define OP(_,_a,_b,_c) (_b == AR ? _c : (_c == X ? (_b == X ? (_a == X ? 0 : 1) : 2) : 3)),
 #define OP_BEGIN static int hl_op_nargs[] = {
 #define OP_END };

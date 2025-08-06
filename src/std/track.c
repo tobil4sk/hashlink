@@ -21,6 +21,8 @@
  */
 #include "hl.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 static int track_depth = 10;
 static int max_depth = 0;

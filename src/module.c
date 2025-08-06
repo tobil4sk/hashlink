@@ -22,6 +22,9 @@
 #include <hl.h>
 #include <hlmodule.h>
 #include <jit.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 #ifdef HL_WIN
 #	undef _GUID

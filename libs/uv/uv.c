@@ -6,6 +6,8 @@
 #	include <hl.h>
 #	include <uv.h>
 #endif
+#include <string.h>
+#include <stdlib.h>
 
 #if (UV_VERSION_MAJOR <= 0)
 #	error "libuv1-dev required, uv version 0.x found"

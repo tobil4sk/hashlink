@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <hl.h>
+#include <string.h>
 
 HL_PRIM vbyte *hl_alloc_bytes( int size ) {
 	return (vbyte*)hl_gc_alloc_noptr(size);

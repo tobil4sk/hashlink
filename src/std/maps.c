@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <hl.h>
+#include <string.h>
 #ifdef HL_VCC
 #	pragma warning(disable:4034) // sizeof(void) == 0
 #endif

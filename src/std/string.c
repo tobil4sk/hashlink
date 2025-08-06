@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <hl.h>
+#include <string.h>
 
 HL_PRIM vbyte *hl_itos( int i, int *len ) {
 	uchar tmp[24];
