@@ -24,6 +24,7 @@
 #include "hlsystem.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #ifdef HL_WIN
 #	include <locale.h>
 typedef uchar pchar;
@@ -33,6 +34,7 @@ typedef uchar pchar;
 #define ptoi(s)	wcstol(s,NULL,10)
 #define PSTR(x) USTR(x)
 #else
+#	include <string.h>
 #	include <sys/stat.h>
 typedef char pchar;
 #define pprintf printf

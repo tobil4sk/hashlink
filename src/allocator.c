@@ -21,6 +21,8 @@
  */
 #include "hl.h"
 
+#include <stdlib.h>
+#include <string.h>
 #ifdef HL_WIN
 #	include <intrin.h>
 static unsigned int __inline TRAILING_ONES( unsigned int x ) {

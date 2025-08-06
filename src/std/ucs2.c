@@ -22,6 +22,8 @@
 #include <hl.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifndef HL_NATIVE_UCHAR_FUN
 

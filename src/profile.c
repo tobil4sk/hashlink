@@ -23,6 +23,8 @@
 #include <hlmodule.h>
 #include "hlsystem.h"
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #ifdef HL_LINUX
 #include <semaphore.h>

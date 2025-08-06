@@ -27,6 +27,8 @@
 #include "hlsystem.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifdef __arm__
 #	error "JIT does not support ARM processors, only x86 and x86-64 are supported, please use HashLink/C native compilation instead"
