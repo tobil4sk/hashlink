@@ -1073,6 +1073,7 @@ void *hl_malloc( hl_alloc *a, int size ) {
 	void *p;
 	if( !size ) return NULL;
 	size += hl_pad_size(size,&hlt_dyn);
+	size = __builtin_align_up(size, _Alignof(max_align_t));
 	if( b == NULL || b->size <= size ) {
 		int alloc = size < 4096-sizeof(hl_alloc_block) ? 4096-sizeof(hl_alloc_block) : size;
 		b = (hl_alloc_block *)malloc(sizeof(hl_alloc_block) + alloc);

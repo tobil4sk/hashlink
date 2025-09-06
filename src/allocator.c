@@ -320,6 +320,7 @@ static void *gc_alloc_fixed( int part, int kind ) {
 }
 
 static void *gc_alloc_var( int part, int size, int kind ) {
+	size = __builtin_align_up(size, _Alignof(max_align_t));
 	int pid = (part << PAGE_KIND_BITS) | kind;
 	gc_pheader *ph = gc_free_pages[pid];
 	gc_allocator_page_data *p = NULL;
@@ -391,10 +392,12 @@ static void *gc_allocator_alloc( int *size, int page_kind ) {
 	if( sz >= GC_LARGE_BLOCK ) {
 		sz += (-sz) & (GC_PAGE_SIZE - 1);
 		*size = sz;
+		sz = __builtin_align_up(sz, _Alignof(max_align_t));
 		gc_pheader *ph = gc_allocator_new_page((GC_LARGE_PART << PAGE_KIND_BITS) | page_kind,sz,sz,page_kind,false);
 		return ph->base;
 	}
-	if( sz <= GC_SIZES[GC_FIXED_PARTS-1] && page_kind != MEM_KIND_FINALIZER ) {
+	if( __builtin_align_up(sz, _Alignof(max_align_t)) <= GC_SIZES[GC_FIXED_PARTS-1] && page_kind != MEM_KIND_FINALIZER ) {
+		sz = __builtin_align_up(sz, _Alignof(max_align_t));
 		int part = (sz >> GC_ALIGN_BITS) - 1;
 		*size = GC_SIZES[part];
 		return gc_alloc_fixed(part, page_kind);
@@ -405,6 +408,7 @@ static void *gc_allocator_alloc( int *size, int page_kind ) {
 		int query = sz + ((-sz) & (block - 1));
 		if( query < block * 255 ) {
 			*size = query;
+			query = __builtin_align_up(query, _Alignof(max_align_t));
 			return gc_alloc_var(p, query, page_kind);
 		}
 	}
