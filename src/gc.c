@@ -254,7 +254,7 @@ static void gc_global_lock( bool lock ) {
 	if( lock ) {
 		if( !t )
 			hl_fatal("Can't lock GC in unregistered thread");
-		if( mt ) gc_save_context(t,&lock);
+		if( mt ) gc_save_context(t,__builtin_frame_address(0));
 		t->gc_blocking++;
 		if( mt ) hl_mutex_acquire(gc_threads.global_lock);
 	} else {
@@ -371,7 +371,7 @@ static void gc_stop_world( bool b ) {
 		gc_threads.stopping_world = false;
 	}
 #	else
-	if( b ) gc_save_context(current_thread,&b);
+	if( b ) gc_save_context(current_thread,__builtin_frame_address(0));
 #	endif
 }
 
@@ -1031,7 +1031,7 @@ HL_API void hl_blocking( bool b ) {
 	if( b ) {
 #		ifdef HL_THREADS
 		if( t->gc_blocking == 0 )
-			gc_save_context(t,&b);
+			gc_save_context(t,__builtin_frame_address(0));
 #		endif
 		t->gc_blocking++;
 	} else if( t->gc_blocking == 0 )
