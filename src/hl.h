@@ -180,7 +180,11 @@
 #endif
 
 #ifdef HL_64
-#	define HL_WSIZE 8
+#	ifdef __CHERI_PURE_CAPABILITY__
+#		define HL_WSIZE 16
+#	else
+#		define HL_WSIZE 8
+#	endif
 #	define IS_64	1
 #	ifdef HL_VCC
 #		define _PTR_FMT	L"%IX"
@@ -205,7 +209,11 @@
 #	define C_FUNCTION_END
 #endif
 
+#ifdef __CHERI_PURE_CAPABILITY__
+typedef ptraddr_t int_val;
+#else
 typedef intptr_t int_val;
+#endif
 typedef long long int64;
 typedef unsigned long long uint64;
 
