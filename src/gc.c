@@ -1188,6 +1188,11 @@ static void *gc_alloc_page_memory( int size ) {
 	return sys_alloc_align(size, GC_PAGE_SIZE);
 #elif defined(HL_EMSCRIPTEN)
 	return emscripten_builtin_memalign(GC_PAGE_SIZE, size);
+#elif defined(__CHERI_PURE_CAPABILITY__)
+	void *ptr;
+	if( posix_memalign(&ptr,GC_PAGE_SIZE,size) )
+		return NULL;
+	return ptr;
 #else
 	static int recursions = 0;
 	int i = 0;
@@ -1242,6 +1247,8 @@ static void gc_free_page_memory( void *ptr, int size ) {
 	sys_free_align(ptr,size);
 #elif defined(HL_EMSCRIPTEN)
 	emscripten_builtin_free(ptr);
+#elif defined(__CHERI_PURE_CAPABILITY__)
+	free(ptr);
 #else
 	pextra *e = extra_pages, *prev = NULL;
 	while( e ) {
