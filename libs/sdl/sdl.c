@@ -168,6 +168,20 @@ HL_PRIM int HL_NAME(event_poll)( SDL_Event *e ) {
 	return SDL_PollEvent(e);
 }
 
+// sdl2 compat
+static int index_from_joystick_id(SDL_JoystickID id) {
+	int count;
+	int index = -1;
+	SDL_JoystickID* joysticks = SDL_GetJoysticks(&count);
+	for (int i = 0; i < count; i++) {
+		if (joysticks[i] == id) {
+			index = i;
+		}
+	}
+	SDL_free(joysticks);
+	return index;
+}
+
 HL_PRIM bool HL_NAME(event_loop)( event_data *event ) {
 	while (true) {
 		SDL_Event e;
@@ -305,7 +319,8 @@ HL_PRIM bool HL_NAME(event_loop)( event_data *event ) {
 			break;
 		case SDL_EVENT_GAMEPAD_ADDED:
 			event->type = GControllerAdded;
-			event->reference = e.jdevice.which;
+			// sdl2 compat
+			event->reference = index_from_joystick_id(e.gdevice.which);
 			break;
 		case SDL_EVENT_GAMEPAD_REMOVED:
 			event->type = GControllerRemoved;
@@ -358,7 +373,8 @@ HL_PRIM bool HL_NAME(event_loop)( event_data *event ) {
 			break;
 		case SDL_EVENT_JOYSTICK_ADDED:
 			event->type = JoystickAdded;
-			event->reference = e.jdevice.which;
+			// sdl2 compat
+			event->reference = index_from_joystick_id(e.jdevice.which);
 			break;
 		case SDL_EVENT_JOYSTICK_REMOVED:
 			event->type = JoystickRemoved;
@@ -818,8 +834,16 @@ HL_PRIM int HL_NAME(gctrl_count)() {
 	return count;
 }
 
-HL_PRIM SDL_Gamepad *HL_NAME(gctrl_open)(SDL_JoystickID id) {
-	return SDL_OpenGamepad(id);
+// sdl2 compat
+static SDL_JoystickID joystick_id_from_index(int index) {
+	SDL_JoystickID* sticks = SDL_GetJoysticks(NULL);
+	SDL_JoystickID id = sticks[index];
+	SDL_free(sticks);
+	return id;
+}
+
+HL_PRIM SDL_Gamepad *HL_NAME(gctrl_open)(int idx) {
+	return SDL_OpenGamepad(joystick_id_from_index(idx));
 }
 
 HL_PRIM void HL_NAME(gctrl_close)(SDL_Gamepad *controller) {
@@ -883,7 +907,7 @@ HL_PRIM int HL_NAME(joy_count)() {
 }
 
 HL_PRIM SDL_Joystick *HL_NAME(joy_open)(int idx) {
-	return SDL_OpenJoystick(idx);
+	return SDL_OpenJoystick(joystick_id_from_index(idx));
 }
 
 HL_PRIM void HL_NAME(joy_close)(SDL_Joystick *joystick) {
