@@ -36,7 +36,7 @@
 #define DRAM_PREFETCH(addr) _mm_prefetch(p, 1)
 #elif defined(HL_CLANG) || defined (HL_GCC)
 #define DRAM_PREFETCH(addr) __builtin_prefetch(addr)
-#elif
+#else
 #define DRAM_PREFETCH(addr)
 #endif
 

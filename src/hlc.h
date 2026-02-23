@@ -99,7 +99,7 @@ extern void hl_entry_point();
 #define __hl_prefetch_m2(addr) __builtin_prefetch((void*)addr, 0, 1)
 #define __hl_prefetch_m3(addr) __builtin_prefetch((void*)addr, 0, 0)
 #define __hl_prefetch_m4(addr) __builtin_prefetch((void*)addr, 1)
-#elif
+#else
 #define __hl_prefetch_m0(addr)
 #define __hl_prefetch_m1(addr)
 #define __hl_prefetch_m2(addr)
