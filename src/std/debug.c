@@ -34,7 +34,11 @@
 #   define MAC_DEBUG
 #endif
 
-#if defined(HL_WIN)
+#if defined(HL_WIN) && (defined(__i386__) || defined(__x86_64__))
+#	define WIN_DEBUG
+#endif
+
+#if defined(WIN_DEBUG)
 static HANDLE last_process = NULL, last_thread = NULL;
 static int last_pid = -1;
 static int last_tid = -1;
@@ -65,7 +69,7 @@ static void CleanHandles() {
 #endif
 
 HL_API bool hl_debug_start( int pid ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	last_pid = -1;
 	return (bool)DebugActiveProcess(pid);
 #	elif defined(MAC_DEBUG)
@@ -78,7 +82,7 @@ HL_API bool hl_debug_start( int pid ) {
 }
 
 HL_API bool hl_debug_stop( int pid ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	BOOL b = DebugActiveProcessStop(pid);
 	CleanHandles();
 	return (bool)b;
@@ -92,7 +96,7 @@ HL_API bool hl_debug_stop( int pid ) {
 }
 
 HL_API bool hl_debug_breakpoint( int pid ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	return (bool)DebugBreakProcess(OpenPID(pid));
 #	elif defined(MAC_DEBUG)
 	return mdbg_session_pause(pid);
@@ -104,7 +108,7 @@ HL_API bool hl_debug_breakpoint( int pid ) {
 }
 
 HL_API bool hl_debug_read( int pid, vbyte *addr, vbyte *buffer, int size ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	return (bool)ReadProcessMemory(OpenPID(pid),addr,buffer,size,NULL);
 #	elif defined(MAC_DEBUG)
 	return mdbg_read_memory(pid, addr, buffer, size);
@@ -128,7 +132,7 @@ HL_API bool hl_debug_read( int pid, vbyte *addr, vbyte *buffer, int size ) {
 }
 
 HL_API bool hl_debug_write( int pid, vbyte *addr, vbyte *buffer, int size ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	return (bool)WriteProcessMemory(OpenPID(pid),addr,buffer,size,NULL);
 #	elif defined(MAC_DEBUG)
 	return mdbg_write_memory(pid, addr, buffer, size);
@@ -153,7 +157,7 @@ HL_API bool hl_debug_write( int pid, vbyte *addr, vbyte *buffer, int size ) {
 }
 
 HL_API bool hl_debug_flush( int pid, vbyte *addr, int size ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	return (bool)FlushInstructionCache(OpenPID(pid),addr,size);
 #	elif defined(MAC_DEBUG)
 	return true;
@@ -211,7 +215,7 @@ static void *get_reg( int r ) {
 #endif
 
 HL_API int hl_debug_wait( int pid, int *thread, int timeout ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	DEBUG_EVENT e;
 	if( !WaitForDebugEvent(&e,timeout) )
 		return -1;
@@ -268,7 +272,7 @@ HL_API int hl_debug_wait( int pid, int *thread, int timeout ) {
 }
 
 HL_API bool hl_debug_resume( int pid, int thread ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 	return (bool)ContinueDebugEvent(pid, thread, DBG_CONTINUE);
 #	elif defined(MAC_DEBUG)
 	return mdbg_session_resume(pid);
@@ -279,7 +283,7 @@ HL_API bool hl_debug_resume( int pid, int thread ) {
 #	endif
 }
 
-#ifdef HL_WIN
+#ifdef WIN_DEBUG
 #define DefineGetReg(type,GetFun) \
 	REGDATA *GetFun( type *c, int reg ) { \
 		switch( reg ) { \
@@ -313,7 +317,7 @@ DefineGetReg(CONTEXT,GetContextReg);
 #endif
 
 HL_API void *hl_debug_read_register( int pid, int thread, int reg, bool is64 ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 #	ifdef HL_64
 	if( !is64 ) {
 		WOW64_CONTEXT c;
@@ -360,7 +364,7 @@ HL_API void *hl_debug_read_register( int pid, int thread, int reg, bool is64 ) {
 }
 
 HL_API bool hl_debug_write_register( int pid, int thread, int reg, void *value, bool is64 ) {
-#	if defined(HL_WIN)
+#	if defined(WIN_DEBUG)
 #	ifdef HL_64
 	if( !is64 ) {
 		WOW64_CONTEXT c;
