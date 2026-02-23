@@ -83,7 +83,7 @@ extern void hl_entry_point();
 #define HL__ENUM_CONSTRUCT__	hl_type *t; int index;
 #define HL__ENUM_INDEX__(v)		((venum*)(v))->index
 
-#if defined(HL_VCC)
+#if defined(HL_VCC) && (defined(M_IX86) || defined(M_X64))
 #define __hl_prefetch_m0(addr) _mm_prefetch((char*)addr, _MM_HINT_T0)
 #define __hl_prefetch_m1(addr) _mm_prefetch((char*)addr, _MM_HINT_T1)
 #define __hl_prefetch_m2(addr) _mm_prefetch((char*)addr, _MM_HINT_T2)
