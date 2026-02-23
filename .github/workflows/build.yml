@@ -87,7 +87,7 @@ jobs:
             runner: windows-11-arm
             architecture: arm64
             architecture_string: ARM64
-            cmake_flags: -DBUILD_TESTING=OFF
+            cmake_flags: -DWITH_SDL=OFF -DWITH_VIDEO=OFF -DWITH_OPENAL=OFF -DWITH_FMT=OFF -DWITH_HEAPS=OFF -DWITH_UI=OFF -DBUILD_TESTING=OFF
 
         exclude:
           - target: linux
