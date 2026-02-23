@@ -83,6 +83,12 @@ jobs:
             ffmpeg_url: https://github.com/HaxeFoundation/hashlink/files/5648056/ffmpeg-3.4.2-win64-dev.zip
             architecture_string: x64
 
+          - target: windows
+            runner: windows-11-arm
+            architecture: arm64
+            architecture_string: ARM64
+            cmake_flags: -DBUILD_TESTING=OFF
+
         exclude:
           - target: linux
             build_system: vs2019
@@ -101,6 +107,7 @@ jobs:
 
           - target: windows
             architecture: arm64
+            build_system: vs2019
 
           - target: windows
             build_system: make
@@ -173,6 +180,10 @@ jobs:
             ;;
 
           windows*)
+            if [[ ${{ matrix.architecture }} == arm64 ]]; then
+              exit
+            fi
+
             if [[ ${{ matrix.build_system }} == cmake-mingw ]]; then
               SDL_SUFFIX=mingw
             else
@@ -204,10 +215,12 @@ jobs:
 
     - name: Install haxe
       uses: krdlab/setup-haxe@v2
+      if: matrix.runner != 'windows-11-arm'
       with:
         haxe-version: latest
 
     - name: "Configure: Haxelib"
+      if: matrix.runner != 'windows-11-arm'
       run: |
         set -eux
 
@@ -226,7 +239,8 @@ jobs:
               windows*)
                 cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} \
                   -G "${{ matrix.cmake_generator }}" \
-                  -A ${{ matrix.architecture_string }}
+                  -A ${{ matrix.architecture_string }} \
+                  ${{ matrix.cmake_flags }}
                 ;;
               darwin64)
                 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} \
@@ -252,7 +266,7 @@ jobs:
 
           cmake-mingw)
             cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} \
-              -DWITH_DX12=OFF
+              -DWITH_DX12=OFF ${{ matrix.cmake_flags }}
 
             cmake --build build --config ${{ matrix.cmake_configuration }} --parallel
             BUILD_FOLDER=build/bin
@@ -261,7 +275,7 @@ jobs:
             cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} \
               -G "${{ matrix.cmake_generator }}" \
               -A ${{ matrix.architecture_string }} \
-              -T ClangCL
+              -T ClangCL ${{ matrix.cmake_flags }}
             cmake --build build --config ${{ matrix.cmake_configuration }}
             BUILD_FOLDER=build/bin
             ;;
@@ -340,6 +354,7 @@ jobs:
         esac
 
     - name: "Test haxelib build"
+      if: matrix.runner != 'windows-11-arm'
       run: |
         haxelib git format https://github.com/HaxeFoundation/format
         cd other/haxelib
