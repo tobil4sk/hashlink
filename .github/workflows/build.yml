@@ -162,11 +162,9 @@ jobs:
               libopenal-dev${SUFFIX} \
               libpng-dev${SUFFIX} \
               libsdl2-dev \
-              libturbojpeg0-dev${SUFFIX} \
+              libturbojpeg-dev${SUFFIX} \
               libuv1-dev${SUFFIX} \
               libvorbis-dev${SUFFIX} \
-              libz-dev${SUFFIX} \
-              zlib1g-dev${SUFFIX} \
               libsqlite3-dev${SUFFIX} \
               ${EXTRA_APT_PKGS}
             ;;
