@@ -109,6 +109,11 @@ jobs:
             architecture: arm64
             build_system: vs2019
 
+          # arm runner only comes with x86 mingw
+          - target: windows
+            architecture: arm64
+            build_system: cmake-mingw
+
           - target: windows
             build_system: make
 
