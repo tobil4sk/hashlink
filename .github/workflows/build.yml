@@ -161,7 +161,7 @@ jobs:
               libmbedtls-dev${SUFFIX} \
               libopenal-dev${SUFFIX} \
               libpng-dev${SUFFIX} \
-              libsdl2-dev${SUFFIX} \
+              libsdl2-dev \
               libturbojpeg0-dev${SUFFIX} \
               libuv1-dev${SUFFIX} \
               libvorbis-dev${SUFFIX} \
@@ -252,7 +252,9 @@ jobs:
                   -DFLAT_INSTALL_TREE=ON
                 ;;
               linux32)
-                cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} -DCMAKE_TOOLCHAIN_FILE=other/cmake/linux32.toolchain.cmake ;;
+                cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} -DWITH_SDL=OFF \
+                  -DCMAKE_TOOLCHAIN_FILE=other/cmake/linux32.toolchain.cmake
+                ;;
               linux*)
                 cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.cmake_configuration }} ;;
             esac
@@ -290,7 +292,11 @@ jobs:
             ;;
 
           make*)
-            make
+            if [[ ${{ matrix.target }}${{ matrix.architecture }} == linux32 ]]; then
+              make -o sdl # 32 bit sdl cannot be installed
+            else
+              make
+            fi
             sudo make install
             if [[ ${{ matrix.target }} == linux ]]; then
               sudo ldconfig
