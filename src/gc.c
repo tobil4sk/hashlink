@@ -476,14 +476,17 @@ static gc_pheader *gc_alloc_page( int size, int kind, int block_count ) {
 		}
 		GC_GET_PAGE(ptr) = p;
 	}
+	fprintf(stderr, "Allocated page header %p, base: %p\n", p, p->base);
 
 	return p;
 }
 
 static void gc_free_page( gc_pheader *ph, int block_count ) {
 	int i;
+	fprintf(stderr, "Freeing page header %p, base: %p\n", ph, ph->base);
 	for(i=0;i<ph->page_size>>GC_MASK_BITS;i++) {
 		void *ptr = ph->base + (i<<GC_MASK_BITS);
+		fprintf(stderr, "Emptying page header %p via %p\n", ph, ptr);
 		GC_GET_PAGE(ptr) = NULL;
 	}
 	gc_stats.pages_count--;
@@ -708,6 +711,7 @@ static int gc_flush_mark( gc_mstack *stack ) {
 	while( true ) {
 		void **block = (void**)*--__current_stack;
 		gc_pheader *page = GC_GET_PAGE(block);
+		fprintf(stderr, "gc_flush_mark: page header %p, base: %p\n", page, page->base);
 		unsigned int *mark_bits = NULL;
 		int pos = 0, nwords;
 #		ifdef GC_DEBUG
