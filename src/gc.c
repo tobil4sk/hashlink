@@ -712,7 +712,8 @@ static int gc_flush_mark( gc_mstack *stack ) {
 	while( true ) {
 		void **block = (void**)*--__current_stack;
 		gc_pheader *page = GC_GET_PAGE(block);
-		fprintf(stderr, "gc_flush_mark: block %p, page header %p, base: %p, size: %d\n", block, page, page->base, page->page_size);
+		if (page)
+			fprintf(stderr, "gc_flush_mark: block %p, page header %p, base: %p, size: %d\n", block, page, page->base, page->page_size);
 		fflush(stderr);
 		unsigned int *mark_bits = NULL;
 		int pos = 0, nwords;
