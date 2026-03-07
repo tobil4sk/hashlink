@@ -566,7 +566,7 @@ void *hl_gc_alloc_gen( hl_type *t, int size, int flags ) {
 #	endif
 	gc_global_lock(false);
 	hl_track_call(HL_TRACK_ALLOC, on_alloc(t,size,flags,ptr));
-	fprintf(stderr, "allocated %p with type: %p, \n", ptr, t);
+	// fprintf(stderr, "allocated %p with type: %p, \n", ptr, t);
 	return ptr;
 }
 
@@ -712,8 +712,8 @@ static int gc_flush_mark( gc_mstack *stack ) {
 	while( true ) {
 		void **block = (void**)*--__current_stack;
 		gc_pheader *page = GC_GET_PAGE(block);
-		if (page)
-			fprintf(stderr, "gc_flush_mark: block %p, page header %p, base: %p, size: %x\n", block, page, page->base, page->page_size);
+		// if (page)
+			// fprintf(stderr, "gc_flush_mark: block %p, page header %p, base: %p, size: %x\n", block, page, page->base, page->page_size);
 		fflush(stderr);
 		unsigned int *mark_bits = NULL;
 		int pos = 0, nwords;
