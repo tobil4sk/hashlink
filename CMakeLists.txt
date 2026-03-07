@@ -249,19 +249,6 @@ if (WITH_VM)
     endif()
 endif()
 
-if(CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(libhl PUBLIC -fsanitize=address -fno-omit-frame-pointer)
-    target_compile_options(hl PUBLIC -fsanitize=address -fno-omit-frame-pointer)
-    # link flags for the sanitizer
-    if(COMMAND target_link_options)
-        target_link_options(libhl PUBLIC -fsanitize=address)
-        target_link_options(hl PUBLIC -fsanitize=address)
-    else()
-        target_link_libraries(libhl PUBLIC -fsanitize=address)
-        target_link_libraries(hl PUBLIC -fsanitize=address)
-    endif()
-endif()
-
 if(BUILD_TESTING)
 
     find_program(
