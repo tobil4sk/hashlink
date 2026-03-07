@@ -199,6 +199,16 @@ set_target_properties(libhl
     COMPILE_DEFINITIONS "_USRDLL;LIBHL_EXPORTS;PCRE2_CODE_UNIT_WIDTH=16;HL_DEBUG"
 )
 
+if(CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(libhl PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+    # link flags for the sanitizer
+    if(COMMAND target_link_options)
+        target_link_options(libhl PRIVATE -fsanitize=address)
+    else()
+        target_link_libraries(libhl PRIVATE -fsanitize=address)
+    endif()
+endif()
+
 if(WITH_SYSTEM_PCRE2)
     target_link_libraries(libhl pcre2-16)
 else()
