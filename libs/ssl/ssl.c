@@ -1,8 +1,9 @@
 #define HL_NAME(n) ssl_##n
 
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #ifdef HL_WIN
-#undef _GUID
 #include <winsock2.h>
 #include <wincrypt.h>
 #else
@@ -62,11 +63,11 @@ struct _hl_ssl_pkey {
 	mbedtls_pk_context *k;
 };
 
-#define _SOCK	_ABSTRACT(hl_socket)
-#define TSSL _ABSTRACT(mbedtls_ssl_context)
-#define TCONF _ABSTRACT(mbedtls_ssl_config)
-#define TCERT _ABSTRACT(hl_ssl_cert)
-#define TPKEY _ABSTRACT(hl_ssl_pkey)
+#define _SOCK	HL_ABSTRACT(hl_socket)
+#define TSSL HL_ABSTRACT(mbedtls_ssl_context)
+#define TCONF HL_ABSTRACT(mbedtls_ssl_config)
+#define TCERT HL_ABSTRACT(hl_ssl_cert)
+#define TPKEY HL_ABSTRACT(hl_ssl_pkey)
 
 static bool ssl_init_done = false;
 #if MBEDTLS_VERSION_MAJOR < 4
@@ -178,7 +179,7 @@ static int arr_write( void *arr, const unsigned char *buf, size_t len ) {
 }
 
 HL_PRIM void HL_NAME(ssl_set_bio)( mbedtls_ssl_context *ssl, varray *ctx ) {
-	mbedtls_ssl_set_bio(ssl, ctx, arr_write, arr_read, NULL);	
+	mbedtls_ssl_set_bio(ssl, ctx, arr_write, arr_read, NULL);
 }
 
 HL_PRIM void HL_NAME(ssl_set_hostname)(mbedtls_ssl_context *ssl, vbyte *hostname) {
@@ -193,13 +194,13 @@ HL_PRIM hl_ssl_cert *HL_NAME(ssl_get_peer_certificate)(mbedtls_ssl_context *ssl)
 	return cert;
 }
 
-DEFINE_PRIM(TSSL, ssl_new, TCONF);
-DEFINE_PRIM(_VOID, ssl_close, TSSL);
-DEFINE_PRIM(_I32, ssl_handshake, TSSL);
-DEFINE_PRIM(_VOID, ssl_set_bio, TSSL _DYN);
-DEFINE_PRIM(_VOID, ssl_set_socket, TSSL _SOCK);
-DEFINE_PRIM(_VOID, ssl_set_hostname, TSSL _BYTES);
-DEFINE_PRIM(TCERT, ssl_get_peer_certificate, TSSL);
+HL_DEFINE_PRIM(TSSL, ssl_new, TCONF);
+HL_DEFINE_PRIM(HL_VOID, ssl_close, TSSL);
+HL_DEFINE_PRIM(HL_I32, ssl_handshake, TSSL);
+HL_DEFINE_PRIM(HL_VOID, ssl_set_bio, TSSL HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, ssl_set_socket, TSSL _SOCK);
+HL_DEFINE_PRIM(HL_VOID, ssl_set_hostname, TSSL HL_BYTES);
+HL_DEFINE_PRIM(TCERT, ssl_get_peer_certificate, TSSL);
 
 HL_PRIM int HL_NAME(ssl_send_char)(mbedtls_ssl_context *ssl, int c) {
 	unsigned char cc;
@@ -213,7 +214,7 @@ HL_PRIM int HL_NAME(ssl_send_char)(mbedtls_ssl_context *ssl, int c) {
 
 HL_PRIM int HL_NAME(ssl_send)(mbedtls_ssl_context *ssl, vbyte *buf, int pos, int len) {
 	int r = mbedtls_ssl_write(ssl, (const unsigned char *)buf + pos, len);
-	if( r < 0 ) 
+	if( r < 0 )
 		return ssl_block_error(r);
 	return r;
 }
@@ -235,10 +236,10 @@ HL_PRIM int HL_NAME(ssl_recv)(mbedtls_ssl_context *ssl, vbyte *buf, int pos, int
 	return ret;
 }
 
-DEFINE_PRIM(_I32, ssl_send_char, TSSL _I32);
-DEFINE_PRIM(_I32, ssl_send, TSSL _BYTES _I32 _I32);
-DEFINE_PRIM(_I32, ssl_recv_char, TSSL);
-DEFINE_PRIM(_I32, ssl_recv, TSSL _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_I32, ssl_send_char, TSSL HL_I32);
+HL_DEFINE_PRIM(HL_I32, ssl_send, TSSL HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_I32, ssl_recv_char, TSSL);
+HL_DEFINE_PRIM(HL_I32, ssl_recv, TSSL HL_BYTES HL_I32 HL_I32);
 
 HL_PRIM mbedtls_ssl_config *HL_NAME(conf_new)(bool server) {
 	int ret;
@@ -306,12 +307,12 @@ HL_PRIM void HL_NAME(conf_set_servername_callback)(mbedtls_ssl_config *conf, vcl
 }
 
 
-DEFINE_PRIM(TCONF, conf_new, _BOOL);
-DEFINE_PRIM(_VOID, conf_close, TCONF);
-DEFINE_PRIM(_VOID, conf_set_ca, TCONF TCERT);
-DEFINE_PRIM(_VOID, conf_set_verify, TCONF _I32);
-DEFINE_PRIM(_VOID, conf_set_cert, TCONF TCERT TPKEY);
-DEFINE_PRIM(_VOID, conf_set_servername_callback, TCONF _FUN(_OBJ(TCERT TPKEY), _BYTES));
+HL_DEFINE_PRIM(TCONF, conf_new, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, conf_close, TCONF);
+HL_DEFINE_PRIM(HL_VOID, conf_set_ca, TCONF TCERT);
+HL_DEFINE_PRIM(HL_VOID, conf_set_verify, TCONF HL_I32);
+HL_DEFINE_PRIM(HL_VOID, conf_set_cert, TCONF TCERT TPKEY);
+HL_DEFINE_PRIM(HL_VOID, conf_set_servername_callback, TCONF HL_FUN(HL_OBJ(TCERT TPKEY), HL_BYTES));
 
 HL_PRIM hl_ssl_cert *HL_NAME(cert_load_file)(vbyte *file) {
 #ifdef HL_CONSOLE
@@ -361,7 +362,7 @@ HL_PRIM hl_ssl_cert *HL_NAME(cert_load_defaults)() {
 #if defined(HL_WIN)
 	HCERTSTORE store;
 	PCCERT_CONTEXT cert;
-	
+
 	if (store = CertOpenSystemStore(0, (LPCWSTR)L"Root")) {
 		cert = NULL;
 		while (cert = CertEnumCertificatesInStore(store, cert)) {
@@ -712,17 +713,17 @@ HL_PRIM hl_ssl_cert *HL_NAME(cert_add_der)(hl_ssl_cert *cert, vbyte *data, int l
 }
 
 
-DEFINE_PRIM(TCERT, cert_load_defaults, _NO_ARG);
-DEFINE_PRIM(TCERT, cert_load_file, _BYTES);
-DEFINE_PRIM(TCERT, cert_load_path, _BYTES);
-DEFINE_PRIM(_BYTES, cert_get_subject, TCERT _BYTES);
-DEFINE_PRIM(_BYTES, cert_get_issuer, TCERT _BYTES);
-DEFINE_PRIM(_ARR, cert_get_altnames, TCERT);
-DEFINE_PRIM(_ARR, cert_get_notbefore, TCERT);
-DEFINE_PRIM(_ARR, cert_get_notafter, TCERT);
-DEFINE_PRIM(TCERT, cert_get_next, TCERT);
-DEFINE_PRIM(TCERT, cert_add_pem, TCERT _BYTES);
-DEFINE_PRIM(TCERT, cert_add_der, TCERT _BYTES _I32);
+HL_DEFINE_PRIM(TCERT, cert_load_defaults, HL_NO_ARG);
+HL_DEFINE_PRIM(TCERT, cert_load_file, HL_BYTES);
+HL_DEFINE_PRIM(TCERT, cert_load_path, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, cert_get_subject, TCERT HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, cert_get_issuer, TCERT HL_BYTES);
+HL_DEFINE_PRIM(HL_ARR, cert_get_altnames, TCERT);
+HL_DEFINE_PRIM(HL_ARR, cert_get_notbefore, TCERT);
+HL_DEFINE_PRIM(HL_ARR, cert_get_notafter, TCERT);
+HL_DEFINE_PRIM(TCERT, cert_get_next, TCERT);
+HL_DEFINE_PRIM(TCERT, cert_add_pem, TCERT HL_BYTES);
+HL_DEFINE_PRIM(TCERT, cert_add_der, TCERT HL_BYTES HL_I32);
 
 
 HL_PRIM hl_ssl_pkey *HL_NAME(key_from_der)(vbyte *data, int len, bool pub) {
@@ -793,8 +794,8 @@ HL_PRIM hl_ssl_pkey *HL_NAME(key_from_pem)(vbyte *data, bool pub, vbyte *pass) {
 	return key;
 }
 
-DEFINE_PRIM(TPKEY, key_from_der, _BYTES _I32 _BOOL);
-DEFINE_PRIM(TPKEY, key_from_pem, _BYTES _BOOL _BYTES);
+HL_DEFINE_PRIM(TPKEY, key_from_der, HL_BYTES HL_I32 HL_BOOL);
+HL_DEFINE_PRIM(TPKEY, key_from_pem, HL_BYTES HL_BOOL HL_BYTES);
 
 static mbedtls_md_type_t md_type_from_string(const char *alg) {
   if (strcmp(alg, "MD5") == 0) {
@@ -875,7 +876,7 @@ HL_PRIM bool HL_NAME(dgst_verify)(vbyte *data, int dlen, vbyte *sign, int slen, 
 	const mbedtls_md_info_t *md;
 	int r = -1;
 	unsigned char hash[MBEDTLS_MD_MAX_SIZE];
-	
+
 	md = mbedtls_md_info_from_type(md_type_from_string((char*)alg));
 	if (md == NULL) {
 		hl_error("Invalid hash algorithm");
@@ -891,9 +892,9 @@ HL_PRIM bool HL_NAME(dgst_verify)(vbyte *data, int dlen, vbyte *sign, int slen, 
 	return true;
 }
 
-DEFINE_PRIM(_BYTES, dgst_make, _BYTES _I32 _BYTES _REF(_I32));
-DEFINE_PRIM(_BYTES, dgst_sign, _BYTES _I32 TPKEY _BYTES _REF(_I32));
-DEFINE_PRIM(_BOOL, dgst_verify, _BYTES _I32 _BYTES _I32 TPKEY _BYTES);
+HL_DEFINE_PRIM(HL_BYTES, dgst_make, HL_BYTES HL_I32 HL_BYTES HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BYTES, dgst_sign, HL_BYTES HL_I32 TPKEY HL_BYTES HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BOOL, dgst_verify, HL_BYTES HL_I32 HL_BYTES HL_I32 TPKEY HL_BYTES);
 
 
 #if _MSC_VER
@@ -950,4 +951,4 @@ HL_PRIM void HL_NAME(ssl_init)() {
 	#endif
 }
 
-DEFINE_PRIM(_VOID, ssl_init, _NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, ssl_init, HL_NO_ARG);

@@ -1,6 +1,6 @@
 #define HL_NAME(n) heaps_##n
 #include <meshoptimizer.h>
-#include <hl.h>
+#include <hl_ffi.h>
 
 HL_PRIM int HL_NAME(generate_vertex_remap)(unsigned int* pRemapOut, unsigned int* pIndices, int indexCount, float* pVertices, int vertexCount, int vertexSize) {
 	return meshopt_generateVertexRemap(pRemapOut, pIndices, indexCount, pVertices, vertexCount, vertexSize);
@@ -30,10 +30,10 @@ HL_PRIM int HL_NAME(optimize_vertex_fetch)(float* pVerticesOut, unsigned int* pI
 	return meshopt_optimizeVertexFetch(pVerticesOut, pIndices, indexCount, pVerticesIn, vertexCount, vertexSize);
 }
 
-DEFINE_PRIM(_I32, generate_vertex_remap, _BYTES _BYTES _I32 _BYTES _I32 _I32);
-DEFINE_PRIM(_VOID, remap_index_buffer, _BYTES _BYTES _I32 _BYTES);
-DEFINE_PRIM(_VOID, remap_vertex_buffer, _BYTES _BYTES _I32 _I32 _BYTES);
-DEFINE_PRIM(_I32, simplify, _BYTES _BYTES _I32 _BYTES _I32 _I32 _I32 _F32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, optimize_vertex_cache, _BYTES _BYTES _I32 _I32);
-DEFINE_PRIM(_VOID, optimize_overdraw, _BYTES _BYTES _I32 _BYTES _I32 _I32 _F32);
-DEFINE_PRIM(_I32, optimize_vertex_fetch, _BYTES _BYTES _I32 _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_I32, generate_vertex_remap, HL_BYTES HL_BYTES HL_I32 HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, remap_index_buffer, HL_BYTES HL_BYTES HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, remap_vertex_buffer, HL_BYTES HL_BYTES HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_I32, simplify, HL_BYTES HL_BYTES HL_I32 HL_BYTES HL_I32 HL_I32 HL_I32 HL_F32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, optimize_vertex_cache, HL_BYTES HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, optimize_overdraw, HL_BYTES HL_BYTES HL_I32 HL_BYTES HL_I32 HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_I32, optimize_vertex_fetch, HL_BYTES HL_BYTES HL_I32 HL_BYTES HL_I32 HL_I32);

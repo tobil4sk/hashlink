@@ -1,6 +1,8 @@
 #define HL_NAME(n) fmt_##n
 #include <mikktspace.h>
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 
 typedef struct {
 	hl_type *t;
@@ -53,7 +55,7 @@ static void get_tcoord( Mikkt *ctx, float fvPosOut[], const int iFace, const int
 	int v = i->indexes[idx];
 	int p = v * i->stride + i->uvPos;
 	fvPosOut[0] = i->buffer[p++];
-	fvPosOut[1] = i->buffer[p++];	
+	fvPosOut[1] = i->buffer[p++];
 }
 
 static void set_tangent( Mikkt *ctx, const float fvTangent[], const float fSign, const int iFace, const int iVert ) {
@@ -81,4 +83,4 @@ HL_PRIM bool HL_NAME(compute_mikkt_tangents)( user_info *inf, double threshold )
 	return genTangSpace(&ctx, (float)threshold);
 }
 
-DEFINE_PRIM(_BOOL, compute_mikkt_tangents, _DYN _F64);
+HL_DEFINE_PRIM(HL_BOOL, compute_mikkt_tangents, HL_DYN HL_F64);

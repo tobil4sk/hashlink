@@ -1,6 +1,8 @@
 #define HL_NAME(n) heaps_##n
 #include <renderdoc_app.h>
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 
 #ifdef HL_WIN
 #	undef _GUID
@@ -112,15 +114,15 @@ HL_PRIM bool HL_NAME(rdoc_end_frame_capture)(void *device, void *wndHandle) {
 	return ret == 1 ? true : false;
 }
 
-DEFINE_PRIM(_BOOL, rdoc_init, _NO_ARG);
-DEFINE_PRIM(_BOOL, rdoc_set_capture_keys, _BYTES _I32);
-DEFINE_PRIM(_BOOL, rdoc_set_capture_file_path_template, _BYTES);
-DEFINE_PRIM(_BYTES, rdoc_get_capture_file_path_template, _NO_ARG);
-DEFINE_PRIM(_I32, rdoc_get_num_captures, _NO_ARG);
-DEFINE_PRIM(_BOOL, rdoc_get_capture, _I32 _BYTES _REF(_I32) _REF(_I64));
-DEFINE_PRIM(_BOOL, rdoc_trigger_capture, _NO_ARG);
-DEFINE_PRIM(_BOOL, rdoc_is_target_control_connected, _NO_ARG);
-DEFINE_PRIM(_BOOL, rdoc_launch_replay_ui, _I32 _BYTES);
-DEFINE_PRIM(_BOOL, rdoc_start_frame_capture, _DYN _DYN);
-DEFINE_PRIM(_BOOL, rdoc_is_frame_capturing, _NO_ARG);
-DEFINE_PRIM(_BOOL, rdoc_end_frame_capture, _DYN _DYN);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_init, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_set_capture_keys, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_set_capture_file_path_template, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, rdoc_get_capture_file_path_template, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, rdoc_get_num_captures, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_get_capture, HL_I32 HL_BYTES HL_REF(HL_I32) HL_REF(HL_I64));
+HL_DEFINE_PRIM(HL_BOOL, rdoc_trigger_capture, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_is_target_control_connected, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_launch_replay_ui, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_start_frame_capture, HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_is_frame_capturing, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, rdoc_end_frame_capture, HL_DYN HL_DYN);

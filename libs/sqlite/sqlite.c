@@ -1,6 +1,8 @@
 #define HL_NAME(n) sqlite_##n
 
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #include <string.h>
 #include <sqlite3.h>
 
@@ -317,18 +319,18 @@ HL_PRIM vdynamic *HL_NAME(result_get_float)( sqlite_result *r, int n ) {
 	return hl_make_dyn(&value, &hlt_f64);
 }
 
-#define _CONNECTION _ABSTRACT( sqlite_database )
-#define _RESULT _ABSTRACT( sqlite_result )
+#define _CONNECTION HL_ABSTRACT( sqlite_database )
+#define _RESULT HL_ABSTRACT( sqlite_result )
 
-DEFINE_PRIM(_CONNECTION, connect, _BYTES);
-DEFINE_PRIM(_VOID,       close,   _CONNECTION);
-DEFINE_PRIM(_RESULT,     request, _CONNECTION _BYTES);
-DEFINE_PRIM(_I32,        last_id, _CONNECTION);
+HL_DEFINE_PRIM(_CONNECTION, connect, HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID,       close,   _CONNECTION);
+HL_DEFINE_PRIM(_RESULT,     request, _CONNECTION HL_BYTES);
+HL_DEFINE_PRIM(HL_I32,        last_id, _CONNECTION);
 
-DEFINE_PRIM(_ARR,          result_next,      _RESULT);
-DEFINE_PRIM(_BYTES,        result_get,       _RESULT _I32);
-DEFINE_PRIM(_NULL(_I32),   result_get_int,   _RESULT _I32);
-DEFINE_PRIM(_NULL(_F64),   result_get_float, _RESULT _I32);
-DEFINE_PRIM(_NULL(_I32),   result_get_length, _RESULT);
-DEFINE_PRIM(_I32,          result_get_nfields, _RESULT);
-DEFINE_PRIM(_ARR,          result_get_fields, _RESULT);
+HL_DEFINE_PRIM(HL_ARR,          result_next,      _RESULT);
+HL_DEFINE_PRIM(HL_BYTES,        result_get,       _RESULT HL_I32);
+HL_DEFINE_PRIM(HL_NULL(HL_I32),   result_get_int,   _RESULT HL_I32);
+HL_DEFINE_PRIM(HL_NULL(HL_F64),   result_get_float, _RESULT HL_I32);
+HL_DEFINE_PRIM(HL_NULL(HL_I32),   result_get_length, _RESULT);
+HL_DEFINE_PRIM(HL_I32,          result_get_nfields, _RESULT);
+HL_DEFINE_PRIM(HL_ARR,          result_get_fields, _RESULT);

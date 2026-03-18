@@ -1,5 +1,7 @@
 #define HL_NAME(n) directx_##n
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "hl_ffi.h"
 #include "hlsystem.h"
 
 #define MAX_EVENTS 1024
@@ -929,40 +931,40 @@ HL_PRIM int HL_NAME(win_change_display_setting)(wchar_t* device, vdynamic* ds) {
 	return ChangeDisplaySettingsExW(device, found ? &devMode : NULL, NULL, found ? CDS_FULLSCREEN : 0, NULL);
 }
 
-#define TWIN _ABSTRACT(dx_window)
-DEFINE_PRIM(TWIN, win_create_ex, _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(TWIN, win_create, _I32 _I32);
-DEFINE_PRIM(_VOID, win_set_fullscreen, TWIN _BOOL);
-DEFINE_PRIM(_VOID, win_resize, TWIN _I32);
-DEFINE_PRIM(_VOID, win_set_focus, TWIN);
-DEFINE_PRIM(_VOID, win_set_title, TWIN _BYTES);
-DEFINE_PRIM(_VOID, win_set_size, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_set_min_size, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_set_max_size, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_set_position, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_center, TWIN _BOOL);
-DEFINE_PRIM(_VOID, win_get_size, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, win_get_min_size, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, win_get_max_size, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, win_get_position, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_F64, win_get_opacity, TWIN);
-DEFINE_PRIM(_BOOL, win_set_opacity, TWIN _F64);
-DEFINE_PRIM(_VOID, win_destroy, TWIN);
-DEFINE_PRIM(_BOOL, win_get_next_event, TWIN _DYN);
-DEFINE_PRIM(_VOID, win_clip_cursor, TWIN _BOOL);
-DEFINE_PRIM(_BOOL, set_cursor_pos, _I32 _I32);
-DEFINE_PRIM(_BOOL, win_set_cursor_pos, TWIN _I32 _I32);
-DEFINE_PRIM(_BOOL, win_set_relative_mouse_mode, TWIN _BOOL);
-DEFINE_PRIM(_BOOL, win_get_relative_mouse_mode, _NO_ARG);
-DEFINE_PRIM(_VOID, win_set_drag_accept_files, TWIN _BOOL);
-DEFINE_PRIM(_ARR, win_get_display_settings, _BYTES);
-DEFINE_PRIM(_DYN, win_get_current_display_setting, _BYTES _BOOL);
-DEFINE_PRIM(_I32, win_change_display_setting, _BYTES _DYN);
-DEFINE_PRIM(_ARR, win_get_monitors, _NO_ARG);
-DEFINE_PRIM(_BYTES, win_get_monitor_from_window, TWIN);
+#define TWIN HL_ABSTRACT(dx_window)
+HL_DEFINE_PRIM(TWIN, win_create_ex, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(TWIN, win_create, HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_fullscreen, TWIN HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, win_resize, TWIN HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_focus, TWIN);
+HL_DEFINE_PRIM(HL_VOID, win_set_title, TWIN HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, win_set_size, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_min_size, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_max_size, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_position, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_center, TWIN HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, win_get_size, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, win_get_min_size, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, win_get_max_size, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, win_get_position, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_F64, win_get_opacity, TWIN);
+HL_DEFINE_PRIM(HL_BOOL, win_set_opacity, TWIN HL_F64);
+HL_DEFINE_PRIM(HL_VOID, win_destroy, TWIN);
+HL_DEFINE_PRIM(HL_BOOL, win_get_next_event, TWIN HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, win_clip_cursor, TWIN HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, set_cursor_pos, HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, win_set_cursor_pos, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, win_set_relative_mouse_mode, TWIN HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, win_get_relative_mouse_mode, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, win_set_drag_accept_files, TWIN HL_BOOL);
+HL_DEFINE_PRIM(HL_ARR, win_get_display_settings, HL_BYTES);
+HL_DEFINE_PRIM(HL_DYN, win_get_current_display_setting, HL_BYTES HL_BOOL);
+HL_DEFINE_PRIM(HL_I32, win_change_display_setting, HL_BYTES HL_DYN);
+HL_DEFINE_PRIM(HL_ARR, win_get_monitors, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, win_get_monitor_from_window, TWIN);
 
-DEFINE_PRIM(_I32, get_screen_width, _NO_ARG);
-DEFINE_PRIM(_I32, get_screen_height, _NO_ARG);
+HL_DEFINE_PRIM(HL_I32, get_screen_width, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, get_screen_height, HL_NO_ARG);
 
 HL_PRIM dx_cursor HL_NAME(load_cursor)( int res ) {
 	return LoadCursor(NULL,MAKEINTRESOURCE(res));
@@ -1032,13 +1034,13 @@ HL_PRIM bool HL_NAME(is_cursor_visible)() {
 	return show_cursor;
 }
 
-#define TCURSOR _ABSTRACT(dx_cursor)
-DEFINE_PRIM(TCURSOR, load_cursor, _I32);
-DEFINE_PRIM(TCURSOR, create_cursor, _I32 _I32 _BYTES _I32 _I32);
-DEFINE_PRIM(_VOID, destroy_cursor, TCURSOR);
-DEFINE_PRIM(_VOID, set_cursor, TCURSOR);
-DEFINE_PRIM(_VOID, show_cursor, _BOOL);
-DEFINE_PRIM(_BOOL, is_cursor_visible, _NO_ARG);
+#define TCURSOR HL_ABSTRACT(dx_cursor)
+HL_DEFINE_PRIM(TCURSOR, load_cursor, HL_I32);
+HL_DEFINE_PRIM(TCURSOR, create_cursor, HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, destroy_cursor, TCURSOR);
+HL_DEFINE_PRIM(HL_VOID, set_cursor, TCURSOR);
+HL_DEFINE_PRIM(HL_VOID, show_cursor, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, is_cursor_visible, HL_NO_ARG);
 
 HL_PRIM vbyte *HL_NAME(detect_keyboard_layout)() {
 	char q = MapVirtualKey(0x10, MAPVK_VSC_TO_VK);
@@ -1051,4 +1053,4 @@ HL_PRIM vbyte *HL_NAME(detect_keyboard_layout)() {
 	if (q == 'Q' && w == 'Z' && y == 'Y') return "qzerty";
 	return "unknown";
 }
-DEFINE_PRIM(_BYTES, detect_keyboard_layout, _NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, detect_keyboard_layout, HL_NO_ARG);

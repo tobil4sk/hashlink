@@ -1,6 +1,8 @@
 #define HL_NAME(n) openal_##n
+
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
-#undef _GUID
+#include <hl_ffi.h>
 
 #ifdef OPENAL_STATIC
 #define AL_LIBTYPE_STATIC
@@ -121,34 +123,34 @@ HL_PRIM void HL_NAME(alc_capture_samples)(ALCdevice *device, vbyte *buffer, int 
 	alcCaptureSamples(device, buffer, samples);
 }
 
-#define TDEVICE  _ABSTRACT(alc_device)
-#define TCONTEXT _ABSTRACT(alc_context)
+#define TDEVICE  HL_ABSTRACT(alc_device)
+#define TCONTEXT HL_ABSTRACT(alc_context)
 
-DEFINE_PRIM(TCONTEXT, alc_create_context,       TDEVICE _BYTES);
-DEFINE_PRIM(_BOOL,    alc_make_context_current, TCONTEXT);
-DEFINE_PRIM(_VOID,    alc_process_context,      TCONTEXT);
-DEFINE_PRIM(_VOID,    alc_suspend_context,      TCONTEXT);
-DEFINE_PRIM(_VOID,    alc_destroy_context,      TCONTEXT);
-DEFINE_PRIM(TCONTEXT, alc_get_current_context,  _NO_ARG);
-DEFINE_PRIM(TDEVICE,  alc_get_contexts_device,  TCONTEXT);
+HL_DEFINE_PRIM(TCONTEXT, alc_create_context,       TDEVICE HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL,    alc_make_context_current, TCONTEXT);
+HL_DEFINE_PRIM(HL_VOID,    alc_process_context,      TCONTEXT);
+HL_DEFINE_PRIM(HL_VOID,    alc_suspend_context,      TCONTEXT);
+HL_DEFINE_PRIM(HL_VOID,    alc_destroy_context,      TCONTEXT);
+HL_DEFINE_PRIM(TCONTEXT, alc_get_current_context,  HL_NO_ARG);
+HL_DEFINE_PRIM(TDEVICE,  alc_get_contexts_device,  TCONTEXT);
 
-DEFINE_PRIM(TDEVICE,  alc_open_device,  _BYTES);
-DEFINE_PRIM(_BOOL,    alc_close_device, TDEVICE);
+HL_DEFINE_PRIM(TDEVICE,  alc_open_device,  HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL,    alc_close_device, TDEVICE);
 
-DEFINE_PRIM(_I32,     alc_get_error, TDEVICE);
+HL_DEFINE_PRIM(HL_I32,     alc_get_error, TDEVICE);
 
-DEFINE_PRIM(_VOID,    alc_load_extensions,      TDEVICE);
-DEFINE_PRIM(_BOOL,    alc_is_extension_present, TDEVICE _BYTES);
-DEFINE_PRIM(_I32,     alc_get_enum_value,       TDEVICE _BYTES);
+HL_DEFINE_PRIM(HL_VOID,    alc_load_extensions,      TDEVICE);
+HL_DEFINE_PRIM(HL_BOOL,    alc_is_extension_present, TDEVICE HL_BYTES);
+HL_DEFINE_PRIM(HL_I32,     alc_get_enum_value,       TDEVICE HL_BYTES);
 
-DEFINE_PRIM(_BYTES,   alc_get_string,   TDEVICE _I32);
-DEFINE_PRIM(_VOID,    alc_get_integerv, TDEVICE _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_BYTES,   alc_get_string,   TDEVICE HL_I32);
+HL_DEFINE_PRIM(HL_VOID,    alc_get_integerv, TDEVICE HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(TDEVICE,  alc_capture_open_device,  _BYTES _I32 _I32 _I32);
-DEFINE_PRIM(_BOOL,    alc_capture_close_device, TDEVICE);
-DEFINE_PRIM(_VOID,    alc_capture_start,        TDEVICE);
-DEFINE_PRIM(_VOID,    alc_capture_stop,         TDEVICE);
-DEFINE_PRIM(_VOID,    alc_capture_samples,      TDEVICE _BYTES _I32);
+HL_DEFINE_PRIM(TDEVICE,  alc_capture_open_device,  HL_BYTES HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL,    alc_capture_close_device, TDEVICE);
+HL_DEFINE_PRIM(HL_VOID,    alc_capture_start,        TDEVICE);
+HL_DEFINE_PRIM(HL_VOID,    alc_capture_stop,         TDEVICE);
+HL_DEFINE_PRIM(HL_VOID,    alc_capture_samples,      TDEVICE HL_BYTES HL_I32);
 
 // ----------------------------------------------------------------------------
 // AL
@@ -495,93 +497,93 @@ HL_PRIM void HL_NAME(al_get_bufferiv)(unsigned buffer, int param, vbyte *values)
 	alGetBufferiv(buffer, param, (ALint*)values);
 }
 
-DEFINE_PRIM(_VOID, al_doppler_factor  , _F32);
-DEFINE_PRIM(_VOID, al_doppler_velocity, _F32);
-DEFINE_PRIM(_VOID, al_speed_of_sound  , _F32);
-DEFINE_PRIM(_VOID, al_distance_model  , _I32);
+HL_DEFINE_PRIM(HL_VOID, al_doppler_factor  , HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_doppler_velocity, HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_speed_of_sound  , HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_distance_model  , HL_I32);
 
-DEFINE_PRIM(_VOID, al_enable,    _I32);
-DEFINE_PRIM(_VOID, al_disable,   _I32);
-DEFINE_PRIM(_BOOL, al_is_enabled, _I32);
+HL_DEFINE_PRIM(HL_VOID, al_enable,    HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_disable,   HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, al_is_enabled, HL_I32);
 
-DEFINE_PRIM(_VOID, al_get_booleanv, _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_get_integerv, _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_get_floatv,   _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_get_doublev,  _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_get_booleanv, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_get_integerv, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_get_floatv,   HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_get_doublev,  HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_BYTES, al_get_string,  _I32);
-DEFINE_PRIM(_BOOL,  al_get_boolean, _I32);
-DEFINE_PRIM(_I32,   al_get_integer, _I32);
-DEFINE_PRIM(_F32,   al_get_float,   _I32);
-DEFINE_PRIM(_F64,   al_get_double,  _I32);
-DEFINE_PRIM(_I32,   al_get_error,   _NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, al_get_string,  HL_I32);
+HL_DEFINE_PRIM(HL_BOOL,  al_get_boolean, HL_I32);
+HL_DEFINE_PRIM(HL_I32,   al_get_integer, HL_I32);
+HL_DEFINE_PRIM(HL_F32,   al_get_float,   HL_I32);
+HL_DEFINE_PRIM(HL_F64,   al_get_double,  HL_I32);
+HL_DEFINE_PRIM(HL_I32,   al_get_error,   HL_NO_ARG);
 
-DEFINE_PRIM(_VOID, al_load_extensions,      _NO_ARG);
-DEFINE_PRIM(_BOOL, al_is_extension_present, _BYTES);
-DEFINE_PRIM(_I32,  al_get_enum_value,       _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_load_extensions,      HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, al_is_extension_present, HL_BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_enum_value,       HL_BYTES);
 
-DEFINE_PRIM(_VOID, al_listenerf,  _I32 _F32);
-DEFINE_PRIM(_VOID, al_listener3f, _I32 _F32 _F32 _F32);
-DEFINE_PRIM(_VOID, al_listenerfv, _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_listeneri,  _I32 _I32);
-DEFINE_PRIM(_VOID, al_listener3i, _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_listeneriv, _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_listenerf,  HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_listener3f, HL_I32 HL_F32 HL_F32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_listenerfv, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_listeneri,  HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_listener3i, HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_listeneriv, HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_F32,  al_get_listenerf,  _I32);
-DEFINE_PRIM(_VOID, al_get_listener3f, _I32 _REF(_F32) _REF(_F32) _REF(_F32));
-DEFINE_PRIM(_VOID, al_get_listenerfv, _I32 _BYTES);
-DEFINE_PRIM(_I32,  al_get_listeneri,  _I32);
-DEFINE_PRIM(_VOID, al_get_listener3i, _I32 _REF(_I32) _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, al_get_listeneriv, _I32 _BYTES);
+HL_DEFINE_PRIM(HL_F32,  al_get_listenerf,  HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_listener3f, HL_I32 HL_REF(HL_F32) HL_REF(HL_F32) HL_REF(HL_F32));
+HL_DEFINE_PRIM(HL_VOID, al_get_listenerfv, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_listeneri,  HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_listener3i, HL_I32 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, al_get_listeneriv, HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_VOID, al_gen_sources,    _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_delete_sources, _I32 _BYTES);
-DEFINE_PRIM(_BOOL, al_is_source,      _I32);
+HL_DEFINE_PRIM(HL_VOID, al_gen_sources,    HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_delete_sources, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, al_is_source,      HL_I32);
 
-DEFINE_PRIM(_VOID, al_sourcef,  _I32 _I32 _F32);
-DEFINE_PRIM(_VOID, al_source3f, _I32 _I32 _F32 _F32 _F32);
-DEFINE_PRIM(_VOID, al_sourcefv, _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_sourcei,  _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_source3i, _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_sourceiv, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_sourcef,  HL_I32 HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_source3f, HL_I32 HL_I32 HL_F32 HL_F32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_sourcefv, HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_sourcei,  HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_source3i, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_sourceiv, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_F32,  al_get_sourcef,  _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_source3f, _I32 _I32 _REF(_F32) _REF(_F32) _REF(_F32));
-DEFINE_PRIM(_VOID, al_get_sourcefv, _I32 _I32 _BYTES);
-DEFINE_PRIM(_I32,  al_get_sourcei,  _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_source3i, _I32 _I32 _REF(_I32) _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, al_get_sourceiv, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_F32,  al_get_sourcef,  HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_source3f, HL_I32 HL_I32 HL_REF(HL_F32) HL_REF(HL_F32) HL_REF(HL_F32));
+HL_DEFINE_PRIM(HL_VOID, al_get_sourcefv, HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_sourcei,  HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_source3i, HL_I32 HL_I32 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, al_get_sourceiv, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_VOID, al_source_playv,   _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_source_stopv,   _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_source_rewindv, _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_source_pausev,  _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_source_play,    _I32);
-DEFINE_PRIM(_VOID, al_source_stop,    _I32);
-DEFINE_PRIM(_VOID, al_source_rewind,  _I32);
-DEFINE_PRIM(_VOID, al_source_pause,   _I32);
+HL_DEFINE_PRIM(HL_VOID, al_source_playv,   HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_source_stopv,   HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_source_rewindv, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_source_pausev,  HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_source_play,    HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_source_stop,    HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_source_rewind,  HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_source_pause,   HL_I32);
 
-DEFINE_PRIM(_VOID, al_source_queue_buffers,   _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_source_unqueue_buffers, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_source_queue_buffers,   HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_source_unqueue_buffers, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_VOID, al_gen_buffers,    _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_delete_buffers, _I32 _BYTES);
-DEFINE_PRIM(_BOOL, al_is_buffer,      _I32);
-DEFINE_PRIM(_VOID, al_buffer_data,    _I32 _I32 _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, al_gen_buffers,    HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_delete_buffers, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, al_is_buffer,      HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_buffer_data,    HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32);
 
-DEFINE_PRIM(_VOID, al_bufferf,  _I32 _I32 _F32);
-DEFINE_PRIM(_VOID, al_buffer3f, _I32 _I32 _F32 _F32 _F32);
-DEFINE_PRIM(_VOID, al_bufferfv, _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_bufferi,  _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_buffer3i, _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_bufferiv, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_bufferf,  HL_I32 HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_buffer3f, HL_I32 HL_I32 HL_F32 HL_F32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_bufferfv, HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_bufferi,  HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_buffer3i, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_bufferiv, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_F32,  al_get_bufferf,  _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_buffer3f, _I32 _I32 _REF(_F32) _REF(_F32) _REF(_F32));
-DEFINE_PRIM(_VOID, al_get_bufferfv, _I32 _I32 _BYTES);
-DEFINE_PRIM(_I32,  al_get_bufferi,  _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_buffer3i, _I32 _I32 _REF(_I32) _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, al_get_bufferiv, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_F32,  al_get_bufferf,  HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_buffer3f, HL_I32 HL_I32 HL_REF(HL_F32) HL_REF(HL_F32) HL_REF(HL_F32));
+HL_DEFINE_PRIM(HL_VOID, al_get_bufferfv, HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_bufferi,  HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_buffer3i, HL_I32 HL_I32 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, al_get_bufferiv, HL_I32 HL_I32 HL_BYTES);
 
 // ----------------------------------------------------------------------------
 // EXTENSIONS
@@ -603,8 +605,8 @@ HL_PRIM ALCcontext* HL_NAME(alc_get_thread_context)() {
 	return alcGetThreadContext();
 }
 
-DEFINE_PRIM(_BOOL,    alc_set_thread_context, TCONTEXT);
-DEFINE_PRIM(TCONTEXT, alc_get_thread_context, _NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL,    alc_set_thread_context, TCONTEXT);
+HL_DEFINE_PRIM(TCONTEXT, alc_get_thread_context, HL_NO_ARG);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -626,9 +628,9 @@ HL_PRIM void HL_NAME(alc_render_samples_soft)(ALCdevice *device, vbyte *buffer, 
 	alcRenderSamplesSOFT(device, buffer, samples);
 }
 
-DEFINE_PRIM(TDEVICE, alc_loopback_open_device_soft,       _BYTES);
-DEFINE_PRIM(_BOOL,   alc_is_render_format_supported_soft, TDEVICE _I32 _I32 _I32);
-DEFINE_PRIM(_VOID,   alc_render_samples_soft,             TDEVICE _BYTES _I32);
+HL_DEFINE_PRIM(TDEVICE, alc_loopback_open_device_soft,       HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL,   alc_is_render_format_supported_soft, TDEVICE HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID,   alc_render_samples_soft,             TDEVICE HL_BYTES HL_I32);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -645,8 +647,8 @@ HL_PRIM void HL_NAME(alc_device_resume_soft)(ALCdevice *device) {
 	alcDeviceResumeSOFT(device);
 }
 
-DEFINE_PRIM(_VOID, alc_device_pause_soft,  TDEVICE);
-DEFINE_PRIM(_VOID, alc_device_resume_soft, TDEVICE);
+HL_DEFINE_PRIM(HL_VOID, alc_device_pause_soft,  TDEVICE);
+HL_DEFINE_PRIM(HL_VOID, alc_device_resume_soft, TDEVICE);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -663,8 +665,8 @@ HL_PRIM bool HL_NAME(alc_reset_device_soft)(ALCdevice *device, vbyte *attribs) {
 	return alcResetDeviceSOFT(device, (ALCint*)attribs) == ALC_TRUE;
 }
 
-DEFINE_PRIM(_BYTES, alc_get_stringi_soft,  TDEVICE _I32 _I32);
-DEFINE_PRIM(_BOOL,  alc_reset_device_soft, TDEVICE _BYTES);
+HL_DEFINE_PRIM(HL_BYTES, alc_get_stringi_soft,  TDEVICE HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL,  alc_reset_device_soft, TDEVICE HL_BYTES);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -676,7 +678,7 @@ HL_PRIM void HL_NAME(alc_get_integer64v_soft)(ALCdevice *device, int param, int 
 	alcGetInteger64vSOFT(device, param, index, (ALCint64SOFT*)values);
 }
 
-DEFINE_PRIM(_VOID, alc_get_integer64v_soft,  TDEVICE _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, alc_get_integer64v_soft,  TDEVICE HL_I32 HL_I32 HL_BYTES);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -688,7 +690,7 @@ HL_PRIM bool HL_NAME(alc_reopen_device_soft)(ALCdevice *device, vbyte *deviceNam
 	return alcReopenDeviceSOFT(device, deviceName, (ALCint*)attribs);
 }
 
-DEFINE_PRIM(_BOOL,  alc_reopen_device_soft, TDEVICE _BYTES _BYTES);
+HL_DEFINE_PRIM(HL_BOOL,  alc_reopen_device_soft, TDEVICE HL_BYTES HL_BYTES);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -700,7 +702,7 @@ HL_PRIM void HL_NAME(al_buffer_data_static)(unsigned buffer, int format, vbyte *
 	alBufferDataStatic(buffer, format, data, len, freq);
 }
 
-DEFINE_PRIM(_VOID, al_buffer_data_static, _I32 _I32 _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, al_buffer_data_static, HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -712,7 +714,7 @@ HL_PRIM void HL_NAME(al_buffer_sub_data_soft)(unsigned buffer, int format, vbyte
 	alBufferSubDataSOFT(buffer, format, data, offset, length);
 }
 
-DEFINE_PRIM(_VOID, al_buffer_sub_data_soft, _I32 _I32 _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, al_buffer_sub_data_soft, HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -730,8 +732,8 @@ HL_PRIM void HL_NAME(al_request_foldback_stop)() {
 	alRequestFoldbackStop();
 }
 
-DEFINE_PRIM(_VOID, al_request_foldback_start, _I32 _I32 _I32 _BYTES _FUN(_VOID, _I32 _I32));
-DEFINE_PRIM(_VOID, al_request_foldback_stop,  _NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, al_request_foldback_start, HL_I32 HL_I32 HL_I32 HL_BYTES HL_FUN(HL_VOID, HL_I32 HL_I32));
+HL_DEFINE_PRIM(HL_VOID, al_request_foldback_stop,  HL_NO_ARG);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -758,10 +760,10 @@ HL_PRIM bool HL_NAME(al_is_buffer_format_supported_soft)(int format) {
 	return alIsBufferFormatSupportedSOFT(format) == AL_TRUE;
 }
 
-DEFINE_PRIM(_VOID, al_buffer_samples_soft,              _I32 _I32 _I32 _I32 _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_buffer_sub_samples_soft,          _I32 _I32 _I32 _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_get_buffer_samples_soft,          _I32 _I32 _I32 _I32 _I32 _BYTES);
-DEFINE_PRIM(_BOOL, al_is_buffer_format_supported_soft,  _I32);
+HL_DEFINE_PRIM(HL_VOID, al_buffer_samples_soft,              HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_buffer_sub_samples_soft,          HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_get_buffer_samples_soft,          HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, al_is_buffer_format_supported_soft,  HL_I32);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -849,21 +851,21 @@ HL_PRIM void HL_NAME(al_get_sourcei64v_soft)(unsigned source, int param, vbyte *
 	alGetSourcei64vSOFT(source, param, (ALint64SOFT*)values);
 }
 
-DEFINE_PRIM(_VOID, al_sourced_soft,  _I32 _I32 _F64);
-DEFINE_PRIM(_VOID, al_source3d_soft, _I32 _I32 _F64 _F64 _F64);
-DEFINE_PRIM(_VOID, al_sourcedv_soft, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_sourced_soft,  HL_I32 HL_I32 HL_F64);
+HL_DEFINE_PRIM(HL_VOID, al_source3d_soft, HL_I32 HL_I32 HL_F64 HL_F64 HL_F64);
+HL_DEFINE_PRIM(HL_VOID, al_sourcedv_soft, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_F64,  al_get_sourced_soft,  _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_source3d_soft, _I32 _I32 _REF(_F64) _REF(_F64) _REF(_F64));
-DEFINE_PRIM(_VOID, al_get_sourcedv_soft, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_F64,  al_get_sourced_soft,  HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_source3d_soft, HL_I32 HL_I32 HL_REF(HL_F64) HL_REF(HL_F64) HL_REF(HL_F64));
+HL_DEFINE_PRIM(HL_VOID, al_get_sourcedv_soft, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_VOID, al_sourcei64_soft,  _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_source3i64_soft, _I32 _I32 _I32 _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_sourcei64v_soft, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_sourcei64_soft,  HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_source3i64_soft, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_sourcei64v_soft, HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_VOID, al_get_sourcei64_soft,  _I32 _I32 _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, al_get_source3i64_soft, _I32 _I32 _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, al_get_sourcei64v_soft, _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_get_sourcei64_soft,  HL_I32 HL_I32 HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, al_get_source3i64_soft, HL_I32 HL_I32 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, al_get_sourcei64v_soft, HL_I32 HL_I32 HL_BYTES);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -880,8 +882,8 @@ HL_PRIM void HL_NAME(al_process_updates_soft)() {
 	alProcessUpdatesSOFT();
 }
 
-DEFINE_PRIM(_VOID, al_defer_updates_soft,   _NO_ARG);
-DEFINE_PRIM(_VOID, al_process_updates_soft, _NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, al_defer_updates_soft,   HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, al_process_updates_soft, HL_NO_ARG);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -893,7 +895,7 @@ HL_PRIM vbyte* HL_NAME(al_get_stringi_soft)(int param, int index) {
 	return (vbyte*)alGetStringiSOFT(param, index);
 }
 
-DEFINE_PRIM(_BYTES, al_get_stringi_soft, _I32 _I32);
+HL_DEFINE_PRIM(HL_BYTES, al_get_stringi_soft, HL_I32 HL_I32);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -921,10 +923,10 @@ HL_PRIM void HL_NAME(al_get_pointerv_soft)(int param, void **values) {
 	alGetPointervSOFT(param, values);
 }
 
-DEFINE_PRIM(_VOID, al_event_control_soft, _I32 _REF(_I32) _BOOL);
-DEFINE_PRIM(_VOID, al_event_callback_soft, _FUN(_VOID, _I32 _I32 _I32 _I32 _BYTES _DYN) _DYN);
-DEFINE_PRIM(_DYN, al_get_pointer_soft, _I32);
-DEFINE_PRIM(_VOID, al_get_pointerv_soft, _I32 _REF(_DYN));
+HL_DEFINE_PRIM(HL_VOID, al_event_control_soft, HL_I32 HL_REF(HL_I32) HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, al_event_callback_soft, HL_FUN(HL_VOID, HL_I32 HL_I32 HL_I32 HL_I32 HL_BYTES HL_DYN) HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, al_get_pointer_soft, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_pointerv_soft, HL_I32 HL_REF(HL_DYN));
 #endif
 
 // ----------------------------------------------------------------------------
@@ -952,10 +954,10 @@ HL_PRIM void HL_NAME(al_get_buffer_ptrv_soft)(int buffer, int param, void **ptr)
 	alGetBufferPtrvSOFT(buffer, param, ptr);
 }
 
-DEFINE_PRIM(_VOID, al_buffer_callback_soft, _I32 _I32 _I32 _FUN(_I32, _DYN _BYTES _I32) _DYN);
-DEFINE_PRIM(_VOID, al_get_buffer_ptr_soft, _I32 _I32 _REF(_DYN));
-DEFINE_PRIM(_VOID, al_get_buffer3_ptr_soft, _I32 _I32 _REF(_DYN) _REF(_DYN) _REF(_DYN));
-DEFINE_PRIM(_VOID, al_get_buffer_ptrv_soft, _I32 _I32 _REF(_DYN));
+HL_DEFINE_PRIM(HL_VOID, al_buffer_callback_soft, HL_I32 HL_I32 HL_I32 HL_FUN(HL_I32, HL_DYN HL_BYTES HL_I32) HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, al_get_buffer_ptr_soft, HL_I32 HL_I32 HL_REF(HL_DYN));
+HL_DEFINE_PRIM(HL_VOID, al_get_buffer3_ptr_soft, HL_I32 HL_I32 HL_REF(HL_DYN) HL_REF(HL_DYN) HL_REF(HL_DYN));
+HL_DEFINE_PRIM(HL_VOID, al_get_buffer_ptrv_soft, HL_I32 HL_I32 HL_REF(HL_DYN));
 #endif
 
 // ----------------------------------------------------------------------------
@@ -972,8 +974,8 @@ HL_PRIM void HL_NAME(al_source_play_at_timev_soft)(int n, vbyte *sources, int st
 	alSourcePlayAtTimevSOFT(n, (ALuint*)sources, I64_COMBINE(start_time_hi, start_time_lo));
 }
 
-DEFINE_PRIM(_VOID, al_source_play_at_time_soft, _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_source_play_at_timev_soft, _I32 _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, al_source_play_at_time_soft, HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_source_play_at_timev_soft, HL_I32 HL_BYTES HL_I32 HL_I32);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1028,19 +1030,19 @@ HL_PRIM void HL_NAME(al_get_effectfv)(unsigned effect, int param, vbyte *pflValu
 	alGetEffectfv(effect, param, (ALfloat*)pflValues);
 }
 
-DEFINE_PRIM(_VOID, al_gen_effects,    _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_delete_effects, _I32 _BYTES);
-DEFINE_PRIM(_BOOL, al_is_effect,      _I32);
+HL_DEFINE_PRIM(HL_VOID, al_gen_effects,    HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_delete_effects, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, al_is_effect,      HL_I32);
 
-DEFINE_PRIM(_VOID, al_effecti,        _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_effectiv,       _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_effectf,        _I32 _I32 _F32);
-DEFINE_PRIM(_VOID, al_effectfv,       _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_effecti,        HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_effectiv,       HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_effectf,        HL_I32 HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_effectfv,       HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_I32,  al_get_effecti,    _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_effectiv,   _I32 _I32 _BYTES);
-DEFINE_PRIM(_F32,  al_get_effectf,    _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_effectfv,   _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_effecti,    HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_effectiv,   HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_F32,  al_get_effectf,    HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_effectfv,   HL_I32 HL_I32 HL_BYTES);
 
 // ----------------------------------------------------------------------------
 
@@ -1092,19 +1094,19 @@ HL_PRIM void HL_NAME(al_get_filterfv)(unsigned filter, int param, vbyte *pflValu
 	alGetFilterfv(filter, param, (ALfloat*)pflValues);
 }
 
-DEFINE_PRIM(_VOID, al_gen_filters,    _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_delete_filters, _I32 _BYTES);
-DEFINE_PRIM(_BOOL, al_is_filter,      _I32);
+HL_DEFINE_PRIM(HL_VOID, al_gen_filters,    HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_delete_filters, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, al_is_filter,      HL_I32);
 
-DEFINE_PRIM(_VOID, al_filteri,        _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_filteriv,       _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_filterf,        _I32 _I32 _F32);
-DEFINE_PRIM(_VOID, al_filterfv,       _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_filteri,        HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_filteriv,       HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_filterf,        HL_I32 HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_filterfv,       HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_I32,  al_get_filteri,    _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_filteriv,   _I32 _I32 _BYTES);
-DEFINE_PRIM(_F32,  al_get_filterf,    _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_filterfv,   _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_filteri,    HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_filteriv,   HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_F32,  al_get_filterf,    HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_filterfv,   HL_I32 HL_I32 HL_BYTES);
 
 // ----------------------------------------------------------------------------
 
@@ -1156,17 +1158,17 @@ HL_PRIM void HL_NAME(al_get_auxiliary_effect_slotfv)(unsigned effectslot, int pa
 	alGetAuxiliaryEffectSlotfv(effectslot, param, (ALfloat*)pflValues);
 }
 
-DEFINE_PRIM(_VOID, al_gen_auxiliary_effect_slots,    _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_delete_auxiliary_effect_slots, _I32 _BYTES);
-DEFINE_PRIM(_BOOL, al_is_auxiliary_effect_slot,      _I32);
+HL_DEFINE_PRIM(HL_VOID, al_gen_auxiliary_effect_slots,    HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_delete_auxiliary_effect_slots, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, al_is_auxiliary_effect_slot,      HL_I32);
 
-DEFINE_PRIM(_VOID, al_auxiliary_effect_sloti,        _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, al_auxiliary_effect_slotiv,       _I32 _I32 _BYTES);
-DEFINE_PRIM(_VOID, al_auxiliary_effect_slotf,        _I32 _I32 _F32);
-DEFINE_PRIM(_VOID, al_auxiliary_effect_slotfv,       _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_auxiliary_effect_sloti,        HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_auxiliary_effect_slotiv,       HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, al_auxiliary_effect_slotf,        HL_I32 HL_I32 HL_F32);
+HL_DEFINE_PRIM(HL_VOID, al_auxiliary_effect_slotfv,       HL_I32 HL_I32 HL_BYTES);
 
-DEFINE_PRIM(_I32,  al_get_auxiliary_effect_sloti,    _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_auxiliary_effect_slotiv,   _I32 _I32 _BYTES);
-DEFINE_PRIM(_F32,  al_get_auxiliary_effect_slotf,    _I32 _I32);
-DEFINE_PRIM(_VOID, al_get_auxiliary_effect_slotfv,   _I32 _I32 _BYTES);
+HL_DEFINE_PRIM(HL_I32,  al_get_auxiliary_effect_sloti,    HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_auxiliary_effect_slotiv,   HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_F32,  al_get_auxiliary_effect_slotf,    HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, al_get_auxiliary_effect_slotfv,   HL_I32 HL_I32 HL_BYTES);
 #endif

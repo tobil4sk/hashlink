@@ -1,7 +1,9 @@
 #define HL_NAME(n) ui_##n
 #include <windows.h>
 #include <richedit.h>
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 
 #define CLASS_NAME		USTR("HLUIWindow")
 #define PTEXT			USTR("_text")
@@ -366,27 +368,27 @@ HL_PRIM byte* HL_NAME(ui_get_clipboard_text)() {
 	return b;
 }
 
-#define _WIN _ABSTRACT(ui_window)
-#define _SENTINEL _ABSTRACT(ui_sentinel)
+#define _WIN HL_ABSTRACT(ui_window)
+#define _SENTINEL HL_ABSTRACT(ui_sentinel)
 
-DEFINE_PRIM(_VOID, ui_init, _NO_ARG);
-DEFINE_PRIM(_I32, ui_dialog, _BYTES _BYTES _I32);
-DEFINE_PRIM(_WIN, ui_winlog_new, _BYTES _I32 _I32);
-DEFINE_PRIM(_WIN, ui_button_new, _WIN _BYTES _FUN(_VOID,_NO_ARG));
-DEFINE_PRIM(_VOID, ui_winlog_set_text, _WIN _BYTES _BOOL);
-DEFINE_PRIM(_VOID, ui_win_set_text, _WIN _BYTES);
-DEFINE_PRIM(_VOID, ui_win_set_enable, _WIN _BOOL);
-DEFINE_PRIM(_VOID, ui_win_destroy, _WIN);
-DEFINE_PRIM(_I32, ui_loop, _BOOL);
-DEFINE_PRIM(_VOID, ui_stop_loop, _NO_ARG);
-DEFINE_PRIM(_VOID, ui_close_console, _NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, ui_init, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, ui_dialog, HL_BYTES HL_BYTES HL_I32);
+HL_DEFINE_PRIM(_WIN, ui_winlog_new, HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(_WIN, ui_button_new, _WIN HL_BYTES HL_FUN(HL_VOID,HL_NO_ARG));
+HL_DEFINE_PRIM(HL_VOID, ui_winlog_set_text, _WIN HL_BYTES HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, ui_win_set_text, _WIN HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, ui_win_set_enable, _WIN HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, ui_win_destroy, _WIN);
+HL_DEFINE_PRIM(HL_I32, ui_loop, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, ui_stop_loop, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, ui_close_console, HL_NO_ARG);
 
-DEFINE_PRIM(_SENTINEL, ui_start_sentinel, _F64 _FUN(_VOID,_NO_ARG));
-DEFINE_PRIM(_VOID, ui_sentinel_tick, _SENTINEL);
-DEFINE_PRIM(_VOID, ui_sentinel_pause, _SENTINEL _BOOL);
-DEFINE_PRIM(_BOOL, ui_sentinel_is_paused, _SENTINEL);
+HL_DEFINE_PRIM(_SENTINEL, ui_start_sentinel, HL_F64 HL_FUN(HL_VOID,HL_NO_ARG));
+HL_DEFINE_PRIM(HL_VOID, ui_sentinel_tick, _SENTINEL);
+HL_DEFINE_PRIM(HL_VOID, ui_sentinel_pause, _SENTINEL HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, ui_sentinel_is_paused, _SENTINEL);
 
-DEFINE_PRIM(_BYTES, ui_choose_file, _BOOL _DYN);
+HL_DEFINE_PRIM(HL_BYTES, ui_choose_file, HL_BOOL HL_DYN);
 
-DEFINE_PRIM(_BOOL, ui_set_clipboard_text, _BYTES);
-DEFINE_PRIM(_BYTES, ui_get_clipboard_text, _NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, ui_set_clipboard_text, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, ui_get_clipboard_text, HL_NO_ARG);

@@ -1,6 +1,8 @@
 #define HL_NAME(n) sdl_##n
 
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #include "hlsystem.h"
 
 #include <locale.h>
@@ -19,8 +21,8 @@
 #	error "SDL2 SDK not found in hl/include/sdl/"
 #endif
 
-#define TWIN _ABSTRACT(sdl_window)
-#define TGL _ABSTRACT(sdl_gl)
+#define TWIN HL_ABSTRACT(sdl_window)
+#define TGL HL_ABSTRACT(sdl_gl)
 
 typedef struct {
 	int x;
@@ -494,31 +496,31 @@ HL_PRIM const char *HL_NAME(detect_keyboard_layout)() {
 	return "unknown";
 }
 
-#define TWIN _ABSTRACT(sdl_window)
-DEFINE_PRIM(_BOOL, init_once, _NO_ARG);
-DEFINE_PRIM(_VOID, gl_options, _I32 _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_BOOL, event_loop, _DYN );
-DEFINE_PRIM(_I32, event_poll, _STRUCT );
-DEFINE_PRIM(_VOID, quit, _NO_ARG);
-DEFINE_PRIM(_VOID, delay, _I32);
-DEFINE_PRIM(_I32, get_screen_width, _NO_ARG);
-DEFINE_PRIM(_I32, get_screen_height, _NO_ARG);
-DEFINE_PRIM(_I32, get_screen_width_of_window, TWIN);
-DEFINE_PRIM(_I32, get_screen_height_of_window, TWIN);
-DEFINE_PRIM(_I32, get_framerate, TWIN);
-DEFINE_PRIM(_VOID, message_box, _BYTES _BYTES _BOOL);
-DEFINE_PRIM(_VOID, set_vsync, _BOOL);
-DEFINE_PRIM(_BOOL, detect_win32, _NO_ARG);
-DEFINE_PRIM(_VOID, text_input, _BOOL);
-DEFINE_PRIM(_I32, set_relative_mouse_mode, _BOOL);
-DEFINE_PRIM(_BOOL, get_relative_mouse_mode, _NO_ARG);
-DEFINE_PRIM(_I32, warp_mouse_global, _I32 _I32);
-DEFINE_PRIM(_VOID, warp_mouse_in_window, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, set_window_grab, TWIN _BOOL);
-DEFINE_PRIM(_BOOL, get_window_grab, TWIN);
-DEFINE_PRIM(_I32, get_global_mouse_state, _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_BYTES, detect_keyboard_layout, _NO_ARG);
-DEFINE_PRIM(_BOOL, hint_value, _BYTES _BYTES);
+#define TWIN HL_ABSTRACT(sdl_window)
+HL_DEFINE_PRIM(HL_BOOL, init_once, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, gl_options, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, event_loop, HL_DYN );
+HL_DEFINE_PRIM(HL_I32, event_poll, HL_STRUCT );
+HL_DEFINE_PRIM(HL_VOID, quit, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, delay, HL_I32);
+HL_DEFINE_PRIM(HL_I32, get_screen_width, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, get_screen_height, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, get_screen_width_of_window, TWIN);
+HL_DEFINE_PRIM(HL_I32, get_screen_height_of_window, TWIN);
+HL_DEFINE_PRIM(HL_I32, get_framerate, TWIN);
+HL_DEFINE_PRIM(HL_VOID, message_box, HL_BYTES HL_BYTES HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, set_vsync, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, detect_win32, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, text_input, HL_BOOL);
+HL_DEFINE_PRIM(HL_I32, set_relative_mouse_mode, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, get_relative_mouse_mode, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, warp_mouse_global, HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, warp_mouse_in_window, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, set_window_grab, TWIN HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, get_window_grab, TWIN);
+HL_DEFINE_PRIM(HL_I32, get_global_mouse_state, HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BYTES, detect_keyboard_layout, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, hint_value, HL_BYTES HL_BYTES);
 
 // Window
 
@@ -723,30 +725,30 @@ HL_PRIM void HL_NAME(win_destroy)(SDL_Window *win, SDL_GLContext gl) {
 	SDL_GL_DeleteContext(gl);
 }
 
-#define TGL _ABSTRACT(sdl_gl)
-DEFINE_PRIM(TWIN, win_create_ex, _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(TWIN, win_create, _I32 _I32);
-DEFINE_PRIM(TGL, win_get_glcontext, TWIN);
-DEFINE_PRIM(_BOOL, win_set_fullscreen, TWIN _I32);
-DEFINE_PRIM(_BOOL, win_set_display_mode, TWIN _I32 _I32 _I32);
-DEFINE_PRIM(_I32, win_display_handle, TWIN);
-DEFINE_PRIM(_VOID, win_resize, TWIN _I32);
-DEFINE_PRIM(_VOID, win_raise, TWIN);
-DEFINE_PRIM(_VOID, win_set_title, TWIN _BYTES);
-DEFINE_PRIM(_VOID, win_set_position, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_get_position, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, win_set_size, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_set_min_size, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_set_max_size, TWIN _I32 _I32);
-DEFINE_PRIM(_VOID, win_get_size, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, win_get_min_size, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, win_get_max_size, TWIN _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_F64, win_get_opacity, TWIN);
-DEFINE_PRIM(_BOOL, win_set_opacity, TWIN _F64);
-DEFINE_PRIM(_VOID, win_swap_window, TWIN);
-DEFINE_PRIM(_VOID, win_render_to, TWIN TGL);
-DEFINE_PRIM(_VOID, win_destroy, TWIN TGL);
-DEFINE_PRIM(_I32, win_get_id, TWIN);
+#define TGL HL_ABSTRACT(sdl_gl)
+HL_DEFINE_PRIM(TWIN, win_create_ex, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(TWIN, win_create, HL_I32 HL_I32);
+HL_DEFINE_PRIM(TGL, win_get_glcontext, TWIN);
+HL_DEFINE_PRIM(HL_BOOL, win_set_fullscreen, TWIN HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, win_set_display_mode, TWIN HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_I32, win_display_handle, TWIN);
+HL_DEFINE_PRIM(HL_VOID, win_resize, TWIN HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_raise, TWIN);
+HL_DEFINE_PRIM(HL_VOID, win_set_title, TWIN HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, win_set_position, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_get_position, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, win_set_size, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_min_size, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_set_max_size, TWIN HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, win_get_size, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, win_get_min_size, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, win_get_max_size, TWIN HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_F64, win_get_opacity, TWIN);
+HL_DEFINE_PRIM(HL_BOOL, win_set_opacity, TWIN HL_F64);
+HL_DEFINE_PRIM(HL_VOID, win_swap_window, TWIN);
+HL_DEFINE_PRIM(HL_VOID, win_render_to, TWIN TGL);
+HL_DEFINE_PRIM(HL_VOID, win_destroy, TWIN TGL);
+HL_DEFINE_PRIM(HL_I32, win_get_id, TWIN);
 
 // game controller
 
@@ -780,14 +782,14 @@ HL_PRIM vbyte *HL_NAME(gctrl_get_name)(SDL_GameController *controller) {
 	return (vbyte*)SDL_GameControllerName(controller);
 }
 
-#define TGCTRL _ABSTRACT(sdl_gamecontroller)
-DEFINE_PRIM(_I32, gctrl_count, _NO_ARG);
-DEFINE_PRIM(TGCTRL, gctrl_open, _I32);
-DEFINE_PRIM(_VOID, gctrl_close, TGCTRL);
-DEFINE_PRIM(_I32, gctrl_get_axis, TGCTRL _I32);
-DEFINE_PRIM(_BOOL, gctrl_get_button, TGCTRL _I32);
-DEFINE_PRIM(_I32, gctrl_get_id, TGCTRL);
-DEFINE_PRIM(_BYTES, gctrl_get_name, TGCTRL);
+#define TGCTRL HL_ABSTRACT(sdl_gamecontroller)
+HL_DEFINE_PRIM(HL_I32, gctrl_count, HL_NO_ARG);
+HL_DEFINE_PRIM(TGCTRL, gctrl_open, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, gctrl_close, TGCTRL);
+HL_DEFINE_PRIM(HL_I32, gctrl_get_axis, TGCTRL HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, gctrl_get_button, TGCTRL HL_I32);
+HL_DEFINE_PRIM(HL_I32, gctrl_get_id, TGCTRL);
+HL_DEFINE_PRIM(HL_BYTES, gctrl_get_name, TGCTRL);
 
 HL_PRIM SDL_Haptic *HL_NAME(haptic_open)(SDL_GameController *controller) {
 	return SDL_HapticOpenFromJoystick(SDL_GameControllerGetJoystick(controller));
@@ -804,11 +806,11 @@ HL_PRIM int HL_NAME(haptic_rumble_init)(SDL_Haptic *haptic) {
 HL_PRIM int HL_NAME(haptic_rumble_play)(SDL_Haptic *haptic, double strength, int length) {
 	return SDL_HapticRumblePlay(haptic, (float)strength, length);
 }
-#define THAPTIC _ABSTRACT(sdl_haptic)
-DEFINE_PRIM(THAPTIC, haptic_open, TGCTRL);
-DEFINE_PRIM(_VOID, haptic_close, THAPTIC);
-DEFINE_PRIM(_I32, haptic_rumble_init, THAPTIC);
-DEFINE_PRIM(_I32, haptic_rumble_play, THAPTIC _F64 _I32);
+#define THAPTIC HL_ABSTRACT(sdl_haptic)
+HL_DEFINE_PRIM(THAPTIC, haptic_open, TGCTRL);
+HL_DEFINE_PRIM(HL_VOID, haptic_close, THAPTIC);
+HL_DEFINE_PRIM(HL_I32, haptic_rumble_init, THAPTIC);
+HL_DEFINE_PRIM(HL_I32, haptic_rumble_play, THAPTIC HL_F64 HL_I32);
 
 // joystick
 
@@ -844,15 +846,15 @@ HL_PRIM vbyte *HL_NAME(joy_get_name)(SDL_Joystick *joystick) {
 	return (vbyte*)SDL_JoystickName(joystick);
 }
 
-#define TJOY _ABSTRACT(sdl_joystick)
-DEFINE_PRIM(_I32, joy_count, _NO_ARG);
-DEFINE_PRIM(TJOY, joy_open, _I32);
-DEFINE_PRIM(_VOID, joy_close, TJOY);
-DEFINE_PRIM(_I32, joy_get_axis, TJOY _I32);
-DEFINE_PRIM(_I32, joy_get_hat, TJOY _I32);
-DEFINE_PRIM(_BOOL, joy_get_button, TJOY _I32);
-DEFINE_PRIM(_I32, joy_get_id, TJOY);
-DEFINE_PRIM(_BYTES, joy_get_name, TJOY);
+#define TJOY HL_ABSTRACT(sdl_joystick)
+HL_DEFINE_PRIM(HL_I32, joy_count, HL_NO_ARG);
+HL_DEFINE_PRIM(TJOY, joy_open, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, joy_close, TJOY);
+HL_DEFINE_PRIM(HL_I32, joy_get_axis, TJOY HL_I32);
+HL_DEFINE_PRIM(HL_I32, joy_get_hat, TJOY HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, joy_get_button, TJOY HL_I32);
+HL_DEFINE_PRIM(HL_I32, joy_get_id, TJOY);
+HL_DEFINE_PRIM(HL_BYTES, joy_get_name, TJOY);
 
 // surface
 
@@ -865,9 +867,9 @@ HL_PRIM void HL_NAME(free_surface)( SDL_Surface *s ) {
 	SDL_FreeSurface(s);
 }
 
-#define _SURF	_ABSTRACT(sdl_surface)
-DEFINE_PRIM(_SURF, surface_from, _BYTES _I32 _I32 _I32 _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, free_surface, _SURF);
+#define _SURF	HL_ABSTRACT(sdl_surface)
+HL_DEFINE_PRIM(_SURF, surface_from, HL_BYTES HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, free_surface, _SURF);
 
 // cursor
 
@@ -987,18 +989,18 @@ HL_PRIM varray *HL_NAME(get_devices)() {
 	return a;
 }
 
-#define _CURSOR _ABSTRACT(sdl_cursor)
-DEFINE_PRIM(_VOID, show_cursor, _BOOL);
-DEFINE_PRIM(_BOOL, is_cursor_visible, _NO_ARG);
-DEFINE_PRIM(_CURSOR, cursor_create, _SURF _I32 _I32);
-DEFINE_PRIM(_CURSOR, cursor_create_system, _I32);
-DEFINE_PRIM(_VOID, free_cursor, _CURSOR);
-DEFINE_PRIM(_VOID, set_cursor, _CURSOR);
-DEFINE_PRIM(_BOOL, set_clipboard_text, _BYTES);
-DEFINE_PRIM(_BYTES, get_clipboard_text, _NO_ARG);
-DEFINE_PRIM(_VOID, set_drag_and_drop_enabled, _BOOL);
-DEFINE_PRIM(_BOOL, get_drag_and_drop_enabled, _NO_ARG);
-DEFINE_PRIM(_ARR, get_displays, _NO_ARG);
-DEFINE_PRIM(_ARR, get_display_modes, _I32);
-DEFINE_PRIM(_DYN, get_current_display_mode, _I32 _BOOL);
-DEFINE_PRIM(_ARR, get_devices, _NO_ARG);
+#define _CURSOR HL_ABSTRACT(sdl_cursor)
+HL_DEFINE_PRIM(HL_VOID, show_cursor, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, is_cursor_visible, HL_NO_ARG);
+HL_DEFINE_PRIM(_CURSOR, cursor_create, _SURF HL_I32 HL_I32);
+HL_DEFINE_PRIM(_CURSOR, cursor_create_system, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, free_cursor, _CURSOR);
+HL_DEFINE_PRIM(HL_VOID, set_cursor, _CURSOR);
+HL_DEFINE_PRIM(HL_BOOL, set_clipboard_text, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, get_clipboard_text, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, set_drag_and_drop_enabled, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, get_drag_and_drop_enabled, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_ARR, get_displays, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_ARR, get_display_modes, HL_I32);
+HL_DEFINE_PRIM(HL_DYN, get_current_display_mode, HL_I32 HL_BOOL);
+HL_DEFINE_PRIM(HL_ARR, get_devices, HL_NO_ARG);

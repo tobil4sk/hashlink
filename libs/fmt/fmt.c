@@ -1,6 +1,8 @@
 #define HL_NAME(n) fmt_##n
 #include <png.h>
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 
 #if defined(HL_CONSOLE) && !defined(HL_XBO)
 extern bool sys_jpg_decode( vbyte *data, int dataLen, vbyte *out, int width, int height, int stride, int format, int flags );
@@ -149,9 +151,9 @@ HL_PRIM void HL_NAME(img_scale)( vbyte *out, int outPos, int outStride, int outW
 }
 
 
-DEFINE_PRIM(_BOOL, jpg_decode, _BYTES _I32 _BYTES _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_BOOL, png_decode, _BYTES _I32 _BYTES _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, img_scale, _BYTES _I32 _I32 _I32 _I32 _BYTES _I32 _I32 _I32 _I32 _I32);
+HL_DEFINE_PRIM(HL_BOOL, jpg_decode, HL_BYTES HL_I32 HL_BYTES HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, png_decode, HL_BYTES HL_I32 HL_BYTES HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, img_scale, HL_BYTES HL_I32 HL_I32 HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
 
 
 /* ------------------------------------------------- ZLIB --------------------------------------------------- */
@@ -309,15 +311,15 @@ HL_PRIM int HL_NAME(deflate_bound)( fmt_zip *zip, int size ) {
 	return deflateBound(zip->z,size);
 }
 
-#define _ZIP _ABSTRACT(fmt_zip)
+#define _ZIP HL_ABSTRACT(fmt_zip)
 
-DEFINE_PRIM(_ZIP, inflate_init, _I32);
-DEFINE_PRIM(_ZIP, deflate_init, _I32);
-DEFINE_PRIM(_I32, deflate_bound, _ZIP _I32);
-DEFINE_PRIM(_VOID, zip_end, _ZIP);
-DEFINE_PRIM(_VOID, zip_flush_mode, _ZIP _I32);
-DEFINE_PRIM(_BOOL, inflate_buffer, _ZIP _BYTES _I32 _I32 _BYTES _I32 _I32 _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_BOOL, deflate_buffer, _ZIP _BYTES _I32 _I32 _BYTES _I32 _I32 _REF(_I32) _REF(_I32));
+HL_DEFINE_PRIM(_ZIP, inflate_init, HL_I32);
+HL_DEFINE_PRIM(_ZIP, deflate_init, HL_I32);
+HL_DEFINE_PRIM(HL_I32, deflate_bound, _ZIP HL_I32);
+HL_DEFINE_PRIM(HL_VOID, zip_end, _ZIP);
+HL_DEFINE_PRIM(HL_VOID, zip_flush_mode, _ZIP HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, inflate_buffer, _ZIP HL_BYTES HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32 HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BOOL, deflate_buffer, _ZIP HL_BYTES HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32 HL_REF(HL_I32) HL_REF(HL_I32));
 
 /* ----------------------------------------------- SOUND : OGG ------------------------------------------------ */
 
@@ -426,13 +428,13 @@ HL_PRIM int HL_NAME(ogg_read)( fmt_ogg *o, char *output, int size, int format ) 
 	return ret;
 }
 
-#define _OGG _ABSTRACT(fmt_ogg)
+#define _OGG HL_ABSTRACT(fmt_ogg)
 
-DEFINE_PRIM(_OGG, ogg_open, _BYTES _I32);
-DEFINE_PRIM(_VOID, ogg_info, _OGG _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_I32, ogg_tell, _OGG);
-DEFINE_PRIM(_BOOL, ogg_seek, _OGG _I32);
-DEFINE_PRIM(_I32, ogg_read, _OGG _BYTES _I32 _I32);
+HL_DEFINE_PRIM(_OGG, ogg_open, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, ogg_info, _OGG HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_I32, ogg_tell, _OGG);
+HL_DEFINE_PRIM(HL_BOOL, ogg_seek, _OGG HL_I32);
+HL_DEFINE_PRIM(HL_I32, ogg_read, _OGG HL_BYTES HL_I32 HL_I32);
 
 /* ----------------------------------------------- SOUND : MP3 ------------------------------------------------ */
 
@@ -517,11 +519,11 @@ HL_PRIM int HL_NAME(mp3_decode_frame)( fmt_mp3 *o, char *bytes, int size, int po
 	return samples;
 }
 
-#define _MP3 _ABSTRACT(fmt_mp3)
+#define _MP3 HL_ABSTRACT(fmt_mp3)
 
-DEFINE_PRIM(_MP3, mp3_open, _NO_ARG);
-DEFINE_PRIM(_VOID, mp3_frame_info, _MP3 _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32))
-DEFINE_PRIM(_I32, mp3_decode_frame, _MP3 _BYTES _I32 _I32 _BYTES _I32 _I32);
+HL_DEFINE_PRIM(_MP3, mp3_open, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, mp3_frame_info, _MP3 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32))
+HL_DEFINE_PRIM(HL_I32, mp3_decode_frame, _MP3 HL_BYTES HL_I32 HL_I32 HL_BYTES HL_I32 HL_I32);
 
 /* ------------------------------------------------- CRYPTO --------------------------------------------------- */
 
@@ -631,7 +633,7 @@ static void md5_process( md5_context *ctx, uint8 data[64] ) {
     P( B, C, D, A, 12, 20, 0x8D2A4C8A );
 
 #undef F
-    
+
 #define F(x,y,z) (x ^ y ^ z)
 
     P( A, B, C, D,  5,  4, 0xFFFA3942 );
@@ -785,4 +787,4 @@ HL_PRIM void HL_NAME(digest)( vbyte *out, vbyte *in, int length, int format ) {
 	hl_blocking(false);
 }
 
-DEFINE_PRIM(_VOID, digest, _BYTES _BYTES _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, digest, HL_BYTES HL_BYTES HL_I32 HL_I32);

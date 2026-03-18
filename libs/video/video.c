@@ -1,5 +1,7 @@
 #define HL_NAME(n) video_##n
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
@@ -105,10 +107,10 @@ HL_PRIM void HL_NAME(video_close)( hl_video *v ) {
 	hl_video_free(v);
 }
 
-#define _VIDEO _ABSTRACT(hl_video)
+#define _VIDEO HL_ABSTRACT(hl_video)
 
-DEFINE_PRIM(_VOID, video_init, _NO_ARG);
-DEFINE_PRIM(_VIDEO, video_open, _BYTES);
-DEFINE_PRIM(_VOID, video_get_size, _VIDEO _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_BOOL, video_decode_frame, _VIDEO _BYTES _REF(_F64));
-DEFINE_PRIM(_VOID, video_close, _VIDEO);
+HL_DEFINE_PRIM(HL_VOID, video_init, HL_NO_ARG);
+HL_DEFINE_PRIM(_VIDEO, video_open, HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, video_get_size, _VIDEO HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BOOL, video_decode_frame, _VIDEO HL_BYTES HL_REF(HL_F64));
+HL_DEFINE_PRIM(HL_VOID, video_close, _VIDEO);

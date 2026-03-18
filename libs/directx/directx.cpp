@@ -1,6 +1,7 @@
 #define HL_NAME(n) directx_##n
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
-#undef _GUID
+#include <hl_ffi.h>
 
 #ifdef HL_WIN_DESKTOP
 #include <dxgi.h>
@@ -446,63 +447,63 @@ HL_PRIM void HL_NAME(debug_print)( vbyte *b ) {
 	OutputDebugString((LPCWSTR)b);
 }
 
-#define _DRIVER _ABSTRACT(dx_driver)
-#define _POINTER _ABSTRACT(dx_pointer)
-#define _RESOURCE _ABSTRACT(dx_resource)
+#define _DRIVER HL_ABSTRACT(dx_driver)
+#define _POINTER HL_ABSTRACT(dx_pointer)
+#define _RESOURCE HL_ABSTRACT(dx_resource)
 
-DEFINE_PRIM(_VOID, set_error_handler, _FUN(_VOID, _I32 _I32 _I32));
-DEFINE_PRIM(_DRIVER, create, _ABSTRACT(dx_window) _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, dispose_driver, _DRIVER);
-DEFINE_PRIM(_BOOL, resize, _I32 _I32 _I32);
-DEFINE_PRIM(_RESOURCE, get_back_buffer, _NO_ARG);
-DEFINE_PRIM(_POINTER, create_render_target_view, _RESOURCE _DYN);
-DEFINE_PRIM(_VOID, om_set_render_targets, _I32 _REF(_POINTER) _POINTER);
-DEFINE_PRIM(_POINTER, create_rasterizer_state, _DYN);
-DEFINE_PRIM(_VOID, rs_set_state, _POINTER);
-DEFINE_PRIM(_VOID, rs_set_viewports, _I32 _BYTES);
-DEFINE_PRIM(_VOID, rs_set_scissor_rects, _I32 _BYTES);
-DEFINE_PRIM(_VOID, clear_color, _POINTER _F64 _F64 _F64 _F64);
-DEFINE_PRIM(_VOID, present, _I32 _I32);
-DEFINE_PRIM(_BYTES, get_device_name, _NO_ARG);
-DEFINE_PRIM(_F64, get_supported_version, _NO_ARG);
-DEFINE_PRIM(_RESOURCE, create_buffer, _I32 _I32 _I32 _I32 _I32 _I32 _BYTES);
-DEFINE_PRIM(_BYTES, map, _RESOURCE _I32 _I32 _BOOL _REF(_I32));
-DEFINE_PRIM(_VOID, unmap, _RESOURCE _I32);
-DEFINE_PRIM(_VOID, copy_resource, _RESOURCE _RESOURCE);
-DEFINE_PRIM(_BYTES, compile_shader, _BYTES _I32 _BYTES _BYTES _BYTES _I32 _REF(_BOOL) _REF(_I32));
-DEFINE_PRIM(_BYTES, disassemble_shader, _BYTES _I32 _I32 _BYTES _REF(_I32));
-DEFINE_PRIM(_POINTER, create_vertex_shader, _BYTES _I32);
-DEFINE_PRIM(_POINTER, create_pixel_shader, _BYTES _I32);
-DEFINE_PRIM(_VOID, draw_indexed, _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, draw_indexed_instanced, _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, draw_indexed_instanced_indirect, _RESOURCE _I32);
-DEFINE_PRIM(_VOID, vs_set_shader, _POINTER);
-DEFINE_PRIM(_VOID, vs_set_constant_buffers, _I32 _I32 _REF(_RESOURCE));
-DEFINE_PRIM(_VOID, ps_set_shader, _POINTER);
-DEFINE_PRIM(_VOID, ps_set_constant_buffers, _I32 _I32 _REF(_RESOURCE));
-DEFINE_PRIM(_VOID, update_subresource, _RESOURCE _I32 _DYN _BYTES _I32 _I32);
-DEFINE_PRIM(_VOID, ia_set_index_buffer, _RESOURCE _BOOL _I32);
-DEFINE_PRIM(_VOID, ia_set_vertex_buffers, _I32 _I32 _REF(_RESOURCE) _BYTES _BYTES);
-DEFINE_PRIM(_VOID, ia_set_primitive_topology, _I32);
-DEFINE_PRIM(_VOID, ia_set_input_layout, _POINTER);
-DEFINE_PRIM(_POINTER, create_input_layout, _ARR _BYTES _I32);
-DEFINE_PRIM(_RESOURCE, create_texture_2d, _DYN _BYTES);
-DEFINE_PRIM(_POINTER, create_depth_stencil_view, _RESOURCE _I32 _BOOL);
-DEFINE_PRIM(_POINTER, create_depth_stencil_state, _DYN);
-DEFINE_PRIM(_VOID, om_set_depth_stencil_state, _POINTER _I32);
-DEFINE_PRIM(_VOID, clear_depth_stencil_view, _POINTER _NULL(_F64) _NULL(_I32));
-DEFINE_PRIM(_POINTER, create_blend_state, _BOOL _BOOL _ARR _I32);
-DEFINE_PRIM(_VOID, om_set_blend_state, _POINTER _BYTES _I32);
-DEFINE_PRIM(_VOID, release_pointer, _POINTER);
-DEFINE_PRIM(_VOID, release_resource, _RESOURCE);
-DEFINE_PRIM(_POINTER, create_sampler_state, _DYN);
-DEFINE_PRIM(_POINTER, create_shader_resource_view, _RESOURCE _DYN);
-DEFINE_PRIM(_VOID, ps_set_samplers, _I32 _I32 _REF(_POINTER));
-DEFINE_PRIM(_VOID, vs_set_samplers, _I32 _I32 _REF(_POINTER));
-DEFINE_PRIM(_VOID, ps_set_shader_resources, _I32 _I32 _REF(_POINTER));
-DEFINE_PRIM(_VOID, vs_set_shader_resources, _I32 _I32 _REF(_POINTER));
-DEFINE_PRIM(_VOID, generate_mips, _POINTER);
-DEFINE_PRIM(_BOOL, set_fullscreen_state, _BOOL);
-DEFINE_PRIM(_BOOL, get_fullscreen_state, _NO_ARG);
-DEFINE_PRIM(_VOID, debug_print, _BYTES);
-DEFINE_PRIM(_VOID, copy_subresource_region, _RESOURCE _I32 _I32 _I32 _I32 _RESOURCE _I32 _DYN);
+HL_DEFINE_PRIM(HL_VOID, set_error_handler, HL_FUN(HL_VOID, HL_I32 HL_I32 HL_I32));
+HL_DEFINE_PRIM(_DRIVER, create, HL_ABSTRACT(dx_window) HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, dispose_driver, _DRIVER);
+HL_DEFINE_PRIM(HL_BOOL, resize, HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(_RESOURCE, get_back_buffer, HL_NO_ARG);
+HL_DEFINE_PRIM(_POINTER, create_render_target_view, _RESOURCE HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, om_set_render_targets, HL_I32 HL_REF(_POINTER) _POINTER);
+HL_DEFINE_PRIM(_POINTER, create_rasterizer_state, HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, rs_set_state, _POINTER);
+HL_DEFINE_PRIM(HL_VOID, rs_set_viewports, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, rs_set_scissor_rects, HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, clear_color, _POINTER HL_F64 HL_F64 HL_F64 HL_F64);
+HL_DEFINE_PRIM(HL_VOID, present, HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BYTES, get_device_name, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_F64, get_supported_version, HL_NO_ARG);
+HL_DEFINE_PRIM(_RESOURCE, create_buffer, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, map, _RESOURCE HL_I32 HL_I32 HL_BOOL HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, unmap, _RESOURCE HL_I32);
+HL_DEFINE_PRIM(HL_VOID, copy_resource, _RESOURCE _RESOURCE);
+HL_DEFINE_PRIM(HL_BYTES, compile_shader, HL_BYTES HL_I32 HL_BYTES HL_BYTES HL_BYTES HL_I32 HL_REF(HL_BOOL) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BYTES, disassemble_shader, HL_BYTES HL_I32 HL_I32 HL_BYTES HL_REF(HL_I32));
+HL_DEFINE_PRIM(_POINTER, create_vertex_shader, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(_POINTER, create_pixel_shader, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, draw_indexed, HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, draw_indexed_instanced, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, draw_indexed_instanced_indirect, _RESOURCE HL_I32);
+HL_DEFINE_PRIM(HL_VOID, vs_set_shader, _POINTER);
+HL_DEFINE_PRIM(HL_VOID, vs_set_constant_buffers, HL_I32 HL_I32 HL_REF(_RESOURCE));
+HL_DEFINE_PRIM(HL_VOID, ps_set_shader, _POINTER);
+HL_DEFINE_PRIM(HL_VOID, ps_set_constant_buffers, HL_I32 HL_I32 HL_REF(_RESOURCE));
+HL_DEFINE_PRIM(HL_VOID, update_subresource, _RESOURCE HL_I32 HL_DYN HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, ia_set_index_buffer, _RESOURCE HL_BOOL HL_I32);
+HL_DEFINE_PRIM(HL_VOID, ia_set_vertex_buffers, HL_I32 HL_I32 HL_REF(_RESOURCE) HL_BYTES HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, ia_set_primitive_topology, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, ia_set_input_layout, _POINTER);
+HL_DEFINE_PRIM(_POINTER, create_input_layout, HL_ARR HL_BYTES HL_I32);
+HL_DEFINE_PRIM(_RESOURCE, create_texture_2d, HL_DYN HL_BYTES);
+HL_DEFINE_PRIM(_POINTER, create_depth_stencil_view, _RESOURCE HL_I32 HL_BOOL);
+HL_DEFINE_PRIM(_POINTER, create_depth_stencil_state, HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, om_set_depth_stencil_state, _POINTER HL_I32);
+HL_DEFINE_PRIM(HL_VOID, clear_depth_stencil_view, _POINTER HL_NULL(HL_F64) HL_NULL(HL_I32));
+HL_DEFINE_PRIM(_POINTER, create_blend_state, HL_BOOL HL_BOOL HL_ARR HL_I32);
+HL_DEFINE_PRIM(HL_VOID, om_set_blend_state, _POINTER HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, release_pointer, _POINTER);
+HL_DEFINE_PRIM(HL_VOID, release_resource, _RESOURCE);
+HL_DEFINE_PRIM(_POINTER, create_sampler_state, HL_DYN);
+HL_DEFINE_PRIM(_POINTER, create_shader_resource_view, _RESOURCE HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, ps_set_samplers, HL_I32 HL_I32 HL_REF(_POINTER));
+HL_DEFINE_PRIM(HL_VOID, vs_set_samplers, HL_I32 HL_I32 HL_REF(_POINTER));
+HL_DEFINE_PRIM(HL_VOID, ps_set_shader_resources, HL_I32 HL_I32 HL_REF(_POINTER));
+HL_DEFINE_PRIM(HL_VOID, vs_set_shader_resources, HL_I32 HL_I32 HL_REF(_POINTER));
+HL_DEFINE_PRIM(HL_VOID, generate_mips, _POINTER);
+HL_DEFINE_PRIM(HL_BOOL, set_fullscreen_state, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, get_fullscreen_state, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, debug_print, HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, copy_subresource_region, _RESOURCE HL_I32 HL_I32 HL_I32 HL_I32 _RESOURCE HL_I32 HL_DYN);

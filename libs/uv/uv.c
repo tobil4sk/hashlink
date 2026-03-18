@@ -1,11 +1,8 @@
 #define HL_NAME(n) uv_##n
-#ifdef _WIN32
-#	include <uv.h>
-#	include <hl.h>
-#else
-#	include <hl.h>
-#	include <uv.h>
-#endif
+#define HL_DISABLE_LEGACY_FFI
+#include <hl.h>
+#include <hl_ffi.h>
+#include <uv.h>
 
 #if (UV_VERSION_MAJOR <= 0)
 #	error "libuv1-dev required, uv version 0.x found"
@@ -32,9 +29,9 @@ typedef struct {
 
 #define UV_DATA(h)		((events_data*)((h)->data))
 
-#define _LOOP	_ABSTRACT(uv_loop)
-#define _HANDLE _ABSTRACT(uv_handle)
-#define _CALLB	_FUN(_VOID,_NO_ARG)
+#define _LOOP	HL_ABSTRACT(uv_loop)
+#define _HANDLE HL_ABSTRACT(uv_handle)
+#define _CALLB	HL_FUN(HL_VOID,HL_NO_ARG)
 #define UV_ALLOC(t)		((t*)malloc(sizeof(t)))
 
 // HANDLE
@@ -83,7 +80,7 @@ HL_PRIM void HL_NAME(close_handle)( uv_handle_t *h, vclosure *c ) {
 	free_handle(h);
 }
 
-DEFINE_PRIM(_VOID, close_handle, _HANDLE _CALLB);
+HL_DEFINE_PRIM(HL_VOID, close_handle, _HANDLE _CALLB);
 
 // STREAM
 
@@ -150,10 +147,10 @@ HL_PRIM bool HL_NAME(stream_listen)( uv_stream_t *s, int count, vclosure *c ) {
 	return uv_listen(s,count,on_listen) >= 0;
 }
 
-DEFINE_PRIM(_BOOL, stream_write, _HANDLE _BYTES _I32 _FUN(_VOID,_BOOL));
-DEFINE_PRIM(_BOOL, stream_read_start, _HANDLE _FUN(_VOID,_BYTES _I32));
-DEFINE_PRIM(_VOID, stream_read_stop, _HANDLE);
-DEFINE_PRIM(_BOOL, stream_listen, _HANDLE _I32 _CALLB);
+HL_DEFINE_PRIM(HL_BOOL, stream_write, _HANDLE HL_BYTES HL_I32 HL_FUN(HL_VOID,HL_BOOL));
+HL_DEFINE_PRIM(HL_BOOL, stream_read_start, _HANDLE HL_FUN(HL_VOID,HL_BYTES HL_I32));
+HL_DEFINE_PRIM(HL_VOID, stream_read_stop, _HANDLE);
+HL_DEFINE_PRIM(HL_BOOL, stream_listen, _HANDLE HL_I32 _CALLB);
 
 // TCP
 
@@ -257,16 +254,16 @@ HL_PRIM bool HL_NAME(fs_stop_wrap)(uv_fs_event_t* handle) {
 	return uv_fs_event_stop(handle);
 }
 
-DEFINE_PRIM(_TCP, tcp_init_wrap, _LOOP);
-DEFINE_PRIM(_HANDLE, tcp_connect_wrap, _TCP _I32 _I32 _FUN(_VOID,_BOOL));
-DEFINE_PRIM(_BOOL, tcp_bind_wrap, _TCP _I32 _I32);
-DEFINE_PRIM(_HANDLE, tcp_accept_wrap, _HANDLE);
-DEFINE_PRIM(_VOID, tcp_nodelay_wrap, _TCP _BOOL);
+HL_DEFINE_PRIM(_TCP, tcp_init_wrap, _LOOP);
+HL_DEFINE_PRIM(_HANDLE, tcp_connect_wrap, _TCP HL_I32 HL_I32 HL_FUN(HL_VOID,HL_BOOL));
+HL_DEFINE_PRIM(HL_BOOL, tcp_bind_wrap, _TCP HL_I32 HL_I32);
+HL_DEFINE_PRIM(_HANDLE, tcp_accept_wrap, _HANDLE);
+HL_DEFINE_PRIM(HL_VOID, tcp_nodelay_wrap, _TCP HL_BOOL);
 
 // handle FS
 
-DEFINE_PRIM(_FS, fs_start_wrap, _LOOP _FUN(_VOID, _I32) _BYTES);
-DEFINE_PRIM(_BOOL, fs_stop_wrap, _FS);
+HL_DEFINE_PRIM(_FS, fs_start_wrap, _LOOP HL_FUN(HL_VOID, HL_I32) HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, fs_stop_wrap, _FS);
 
 // loop
 
@@ -276,12 +273,12 @@ HL_PRIM uv_loop_t *HL_NAME(create_loop)() {
 	return l;
 }
 
-DEFINE_PRIM(_LOOP, create_loop, _NO_ARG);
-DEFINE_PRIM(_LOOP, default_loop, _NO_ARG);
-DEFINE_PRIM(_I32, loop_close, _LOOP);
-DEFINE_PRIM(_I32, run, _LOOP _I32);
-DEFINE_PRIM(_I32, loop_alive, _LOOP);
-DEFINE_PRIM(_VOID, stop, _LOOP);
+HL_DEFINE_PRIM(_LOOP, create_loop, HL_NO_ARG);
+HL_DEFINE_PRIM(_LOOP, default_loop, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, loop_close, _LOOP);
+HL_DEFINE_PRIM(HL_I32, run, _LOOP HL_I32);
+HL_DEFINE_PRIM(HL_I32, loop_alive, _LOOP);
+HL_DEFINE_PRIM(HL_VOID, stop, _LOOP);
 
 HL_PRIM uv_loop_t* HL_NAME(default_loop_wrap)() {
 	return uv_default_loop();
@@ -303,10 +300,10 @@ HL_PRIM void HL_NAME(stop_wrap)(uv_loop_t* loop) {
 	uv_stop(loop);
 }
 
-DEFINE_PRIM(_LOOP, default_loop_wrap, _NO_ARG);
-DEFINE_PRIM(_I32, loop_close_wrap, _LOOP);
-DEFINE_PRIM(_I32, run_wrap, _LOOP _I32);
-DEFINE_PRIM(_I32, loop_alive_wrap, _LOOP);
-DEFINE_PRIM(_VOID, stop_wrap, _LOOP);
+HL_DEFINE_PRIM(_LOOP, default_loop_wrap, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, loop_close_wrap, _LOOP);
+HL_DEFINE_PRIM(HL_I32, run_wrap, _LOOP HL_I32);
+HL_DEFINE_PRIM(HL_I32, loop_alive_wrap, _LOOP);
+HL_DEFINE_PRIM(HL_VOID, stop_wrap, _LOOP);
 
-DEFINE_PRIM(_BYTES, strerror, _I32);
+HL_DEFINE_PRIM(HL_BYTES, strerror, HL_I32);

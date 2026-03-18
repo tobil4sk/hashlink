@@ -1,5 +1,7 @@
 #define HL_NAME(n) directx_##n
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #include "hlsystem.h"
 
 #include <xinput.h>
@@ -397,8 +399,8 @@ HL_PRIM void HL_NAME(gctrl_set_vibration)(dx_gctrl_device *device, double streng
 	}
 }
 
-#define TGAMECTRL _ABSTRACT(dx_gctrl_device)
-DEFINE_PRIM(_VOID, gctrl_init, _ARR);
-DEFINE_PRIM(_VOID, gctrl_detect, _FUN(_VOID, TGAMECTRL _BYTES));
-DEFINE_PRIM(_VOID, gctrl_update, _OBJ(TGAMECTRL _I32 _STRING _I32 _BYTES _NULL(_F64)));
-DEFINE_PRIM(_VOID, gctrl_set_vibration, TGAMECTRL _F64);
+#define TGAMECTRL HL_ABSTRACT(dx_gctrl_device)
+HL_DEFINE_PRIM(HL_VOID, gctrl_init, HL_ARR);
+HL_DEFINE_PRIM(HL_VOID, gctrl_detect, HL_FUN(HL_VOID, TGAMECTRL HL_BYTES));
+HL_DEFINE_PRIM(HL_VOID, gctrl_update, HL_OBJ(TGAMECTRL HL_I32 HL_STRING HL_I32 HL_BYTES HL_NULL(HL_F64)));
+HL_DEFINE_PRIM(HL_VOID, gctrl_set_vibration, TGAMECTRL HL_F64);

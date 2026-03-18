@@ -1,6 +1,7 @@
 #define HL_NAME(n) dx12_##n
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
-#undef _GUID
+#include <hl_ffi.h>
 
 #ifdef HL_WIN_DESKTOP
 #include <dxgi.h>
@@ -381,21 +382,21 @@ HL_PRIM int64 HL_NAME(get_timestamp_frequency)() {
 	return (int64)f;
 }
 
-#define _DRIVER _ABSTRACT(dx_driver)
-#define _RES _ABSTRACT(dx_resource)
+#define _DRIVER HL_ABSTRACT(dx_driver)
+#define _RES HL_ABSTRACT(dx_resource)
 
-DEFINE_PRIM(_ARR, list_devices, _NO_ARG);
-DEFINE_PRIM(_DRIVER, create, _ABSTRACT(dx_window) _I32 _BYTES);
-DEFINE_PRIM(_VOID, resize, _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, present, _BOOL);
-DEFINE_PRIM(_VOID, suspend, _NO_ARG);
-DEFINE_PRIM(_VOID, resume, _NO_ARG);
-DEFINE_PRIM(_I32, get_current_back_buffer_index, _NO_ARG);
-DEFINE_PRIM(_VOID, signal, _RES _I64);
-DEFINE_PRIM(_VOID, wait, _RES _I64);
-DEFINE_PRIM(_VOID, flush_messages, _NO_ARG);
-DEFINE_PRIM(_BYTES, get_device_name, _NO_ARG);
-DEFINE_PRIM(_I64, get_timestamp_frequency, _NO_ARG);
+HL_DEFINE_PRIM(HL_ARR, list_devices, HL_NO_ARG);
+HL_DEFINE_PRIM(_DRIVER, create, HL_ABSTRACT(dx_window) HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, resize, HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, present, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, suspend, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, resume, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, get_current_back_buffer_index, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, signal, _RES HL_I64);
+HL_DEFINE_PRIM(HL_VOID, wait, _RES HL_I64);
+HL_DEFINE_PRIM(HL_VOID, flush_messages, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, get_device_name, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I64, get_timestamp_frequency, HL_NO_ARG);
 
 /// --- utilities (from d3dx12.h)
 
@@ -628,24 +629,24 @@ HL_PRIM void HL_NAME(check_feature_support)(D3D12_FEATURE feature, void* data, i
 	static_driver->device->CheckFeatureSupport(feature, &data, dataSize);
 }
 
-DEFINE_PRIM(_VOID, create_render_target_view, _RES _STRUCT _I64);
-DEFINE_PRIM(_VOID, create_depth_stencil_view, _RES _STRUCT _I64);
-DEFINE_PRIM(_VOID, create_shader_resource_view, _RES _STRUCT _I64);
-DEFINE_PRIM(_VOID, create_constant_buffer_view, _STRUCT _I64);
-DEFINE_PRIM(_VOID, create_unordered_access_view, _RES _RES _STRUCT _I64);
-DEFINE_PRIM(_VOID, create_sampler, _STRUCT _I64);
-DEFINE_PRIM(_RES, create_committed_resource, _STRUCT _I32 _STRUCT _I32 _STRUCT);
-DEFINE_PRIM(_RES, get_back_buffer, _I32);
-DEFINE_PRIM(_VOID, resource_release, _RES);
-DEFINE_PRIM(_VOID, resource_set_name, _RES _BYTES);
-DEFINE_PRIM(_I64, resource_get_gpu_virtual_address, _RES);
-DEFINE_PRIM(_BYTES, resource_map, _RES _I32 _STRUCT);
-DEFINE_PRIM(_VOID, resource_unmap, _RES _I32 _STRUCT);
-DEFINE_PRIM(_I64, get_required_intermediate_size, _RES _I32 _I32);
-DEFINE_PRIM(_BOOL, update_sub_resource, _RES _RES _RES _I64 _I32 _I32 _STRUCT);
-DEFINE_PRIM(_VOID, get_copyable_footprints, _STRUCT _I32 _I32 _I64 _STRUCT _BYTES _BYTES _BYTES);
-DEFINE_PRIM(_VOID, copy_descriptors_simple, _I32 _I64 _I64 _I32);
-DEFINE_PRIM(_VOID, check_feature_support, _I32 _BYTES _I32);
+HL_DEFINE_PRIM(HL_VOID, create_render_target_view, _RES HL_STRUCT HL_I64);
+HL_DEFINE_PRIM(HL_VOID, create_depth_stencil_view, _RES HL_STRUCT HL_I64);
+HL_DEFINE_PRIM(HL_VOID, create_shader_resource_view, _RES HL_STRUCT HL_I64);
+HL_DEFINE_PRIM(HL_VOID, create_constant_buffer_view, HL_STRUCT HL_I64);
+HL_DEFINE_PRIM(HL_VOID, create_unordered_access_view, _RES _RES HL_STRUCT HL_I64);
+HL_DEFINE_PRIM(HL_VOID, create_sampler, HL_STRUCT HL_I64);
+HL_DEFINE_PRIM(_RES, create_committed_resource, HL_STRUCT HL_I32 HL_STRUCT HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(_RES, get_back_buffer, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, resource_release, _RES);
+HL_DEFINE_PRIM(HL_VOID, resource_set_name, _RES HL_BYTES);
+HL_DEFINE_PRIM(HL_I64, resource_get_gpu_virtual_address, _RES);
+HL_DEFINE_PRIM(HL_BYTES, resource_map, _RES HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, resource_unmap, _RES HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_I64, get_required_intermediate_size, _RES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, update_sub_resource, _RES _RES _RES HL_I64 HL_I32 HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, get_copyable_footprints, HL_STRUCT HL_I32 HL_I32 HL_I64 HL_STRUCT HL_BYTES HL_BYTES HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, copy_descriptors_simple, HL_I32 HL_I64 HL_I64 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, check_feature_support, HL_I32 HL_BYTES HL_I32);
 
 // ---- SHADERS
 
@@ -755,14 +756,14 @@ HL_PRIM ID3D12CommandSignature *HL_NAME(create_command_signature)( D3D12_COMMAND
 	return sign;
 }
 
-#define _COMPILER _ABSTRACT(dx_compiler)
-DEFINE_PRIM(_COMPILER, compiler_create, _NO_ARG);
-DEFINE_PRIM(_BYTES, compiler_compile, _COMPILER _BYTES _BYTES _ARR _REF(_I32));
-DEFINE_PRIM(_BYTES, serialize_root_signature, _STRUCT _I32 _REF(_I32));
-DEFINE_PRIM(_RES, rootsignature_create, _BYTES _I32);
-DEFINE_PRIM(_RES, create_graphics_pipeline_state, _STRUCT);
-DEFINE_PRIM(_RES, create_compute_pipeline_state, _STRUCT);
-DEFINE_PRIM(_RES, create_command_signature, _STRUCT _RES);
+#define _COMPILER HL_ABSTRACT(dx_compiler)
+HL_DEFINE_PRIM(_COMPILER, compiler_create, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, compiler_compile, _COMPILER HL_BYTES HL_BYTES HL_ARR HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BYTES, serialize_root_signature, HL_STRUCT HL_I32 HL_REF(HL_I32));
+HL_DEFINE_PRIM(_RES, rootsignature_create, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(_RES, create_graphics_pipeline_state, HL_STRUCT);
+HL_DEFINE_PRIM(_RES, create_compute_pipeline_state, HL_STRUCT);
+HL_DEFINE_PRIM(_RES, create_command_signature, HL_STRUCT _RES);
 
 // ---- HEAPS
 
@@ -787,10 +788,10 @@ HL_PRIM ID3D12QueryHeap *HL_NAME(create_query_heap)( D3D12_QUERY_HEAP_DESC *desc
 	return heap;
 }
 
-DEFINE_PRIM(_RES, descriptor_heap_create, _STRUCT);
-DEFINE_PRIM(_I32, get_descriptor_handle_increment_size, _I32);
-DEFINE_PRIM(_I64, descriptor_heap_get_handle, _RES _BOOL);
-DEFINE_PRIM(_RES, create_query_heap, _STRUCT);
+HL_DEFINE_PRIM(_RES, descriptor_heap_create, HL_STRUCT);
+HL_DEFINE_PRIM(HL_I32, get_descriptor_handle_increment_size, HL_I32);
+HL_DEFINE_PRIM(HL_I64, descriptor_heap_get_handle, _RES HL_BOOL);
+HL_DEFINE_PRIM(_RES, create_query_heap, HL_STRUCT);
 
 // ---- SYNCHRO
 
@@ -816,12 +817,12 @@ HL_PRIM bool HL_NAME(waitevent_wait)( HANDLE event, int time ) {
 	return WaitForSingleObject(event,time) == 0;
 }
 
-#define _EVENT _ABSTRACT(dx_event)
-DEFINE_PRIM(_RES, fence_create, _I64 _I32);
-DEFINE_PRIM(_I64, fence_get_completed_value, _RES);
-DEFINE_PRIM(_VOID, fence_set_event, _RES _I64 _EVENT);
-DEFINE_PRIM(_EVENT, waitevent_create, _BOOL);
-DEFINE_PRIM(_BOOL, waitevent_wait, _EVENT _I32);
+#define _EVENT HL_ABSTRACT(dx_event)
+HL_DEFINE_PRIM(_RES, fence_create, HL_I64 HL_I32);
+HL_DEFINE_PRIM(HL_I64, fence_get_completed_value, _RES);
+HL_DEFINE_PRIM(HL_VOID, fence_set_event, _RES HL_I64 _EVENT);
+HL_DEFINE_PRIM(_EVENT, waitevent_create, HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, waitevent_wait, _EVENT HL_I32);
 
 
 // ---- COMMANDS
@@ -1025,53 +1026,53 @@ HL_PRIM void HL_NAME(command_list_dispatch)( ID3D12GraphicsCommandList *l, int x
 }
 
 
-DEFINE_PRIM(_RES, command_queue_create, _I32);
-DEFINE_PRIM(_VOID, command_queue_execute_command_list, _RES _RES);
-DEFINE_PRIM(_VOID, command_queue_execute_command_lists, _RES _ABSTRACT(hl_carray) _I32);
-DEFINE_PRIM(_VOID, command_queue_signal, _RES _RES _I64);
-DEFINE_PRIM(_VOID, command_queue_wait, _RES _RES _I64);
-DEFINE_PRIM(_RES, command_allocator_create, _I32);
-DEFINE_PRIM(_VOID, command_allocator_reset, _RES);
-DEFINE_PRIM(_RES, command_list_create, _I32 _RES _RES);
-DEFINE_PRIM(_VOID, command_list_close, _RES);
-DEFINE_PRIM(_VOID, command_list_reset, _RES _RES _RES);
-DEFINE_PRIM(_VOID, command_list_resource_barrier, _RES _STRUCT);
-DEFINE_PRIM(_VOID, command_list_resource_barriers, _RES _ABSTRACT(hl_carray) _I32);
-DEFINE_PRIM(_VOID, command_list_execute, _RES);
-DEFINE_PRIM(_VOID, command_list_clear_render_target_view, _RES _I64 _STRUCT);
-DEFINE_PRIM(_VOID, command_list_clear_depth_stencil_view, _RES _I64 _I32 _F32 _I32);
-DEFINE_PRIM(_VOID, command_list_draw_instanced, _RES _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, command_list_draw_indexed_instanced, _RES _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, command_list_set_graphics_root_signature, _RES _RES);
-DEFINE_PRIM(_VOID, command_list_set_graphics_root32_bit_constants, _RES _I32 _I32 _BYTES _I32);
-DEFINE_PRIM(_VOID, command_list_set_graphics_root_constant_buffer_view, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_graphics_root_descriptor_table, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_graphics_root_shader_resource_view, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_graphics_root_unordered_access_view, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_descriptor_heaps, _RES _ARR);
-DEFINE_PRIM(_VOID, command_list_set_pipeline_state, _RES _RES);
-DEFINE_PRIM(_VOID, command_list_ia_set_vertex_buffers, _RES _I32 _I32 _STRUCT);
-DEFINE_PRIM(_VOID, command_list_ia_set_index_buffer, _RES _STRUCT);
-DEFINE_PRIM(_VOID, command_list_ia_set_primitive_topology, _RES _I32);
-DEFINE_PRIM(_VOID, command_list_copy_buffer_region, _RES _RES _I64 _RES _I64 _I64);
-DEFINE_PRIM(_VOID, command_list_copy_texture_region, _RES _STRUCT _I32 _I32 _I32 _STRUCT _STRUCT);
-DEFINE_PRIM(_VOID, command_list_om_set_render_targets, _RES _I32 _BYTES _I32 _BYTES);
-DEFINE_PRIM(_VOID, command_list_om_set_stencil_ref, _RES _I32);
-DEFINE_PRIM(_VOID, command_list_rs_set_viewports, _RES _I32 _STRUCT);
-DEFINE_PRIM(_VOID, command_list_rs_set_scissor_rects, _RES _I32 _STRUCT);
-DEFINE_PRIM(_VOID, command_list_execute_indirect, _RES _RES _I32 _RES _I64 _RES _I64);
-DEFINE_PRIM(_VOID, command_list_begin_query, _RES _RES _I32 _I32);
-DEFINE_PRIM(_VOID, command_list_end_query, _RES _RES _I32 _I32);
-DEFINE_PRIM(_VOID, command_list_resolve_query_data, _RES _RES _I32 _I32 _I32 _RES _I64);
-DEFINE_PRIM(_VOID, command_list_set_predication, _RES _RES _I64 _I32);
+HL_DEFINE_PRIM(_RES, command_queue_create, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_queue_execute_command_list, _RES _RES);
+HL_DEFINE_PRIM(HL_VOID, command_queue_execute_command_lists, _RES HL_ABSTRACT(hl_carray) HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_queue_signal, _RES _RES HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_queue_wait, _RES _RES HL_I64);
+HL_DEFINE_PRIM(_RES, command_allocator_create, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_allocator_reset, _RES);
+HL_DEFINE_PRIM(_RES, command_list_create, HL_I32 _RES _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_close, _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_reset, _RES _RES _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_resource_barrier, _RES HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_resource_barriers, _RES HL_ABSTRACT(hl_carray) HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_execute, _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_clear_render_target_view, _RES HL_I64 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_clear_depth_stencil_view, _RES HL_I64 HL_I32 HL_F32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_draw_instanced, _RES HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_draw_indexed_instanced, _RES HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_graphics_root_signature, _RES _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_graphics_root32_bit_constants, _RES HL_I32 HL_I32 HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_graphics_root_constant_buffer_view, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_graphics_root_descriptor_table, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_graphics_root_shader_resource_view, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_graphics_root_unordered_access_view, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_descriptor_heaps, _RES HL_ARR);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_pipeline_state, _RES _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_ia_set_vertex_buffers, _RES HL_I32 HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_ia_set_index_buffer, _RES HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_ia_set_primitive_topology, _RES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_copy_buffer_region, _RES _RES HL_I64 _RES HL_I64 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_copy_texture_region, _RES HL_STRUCT HL_I32 HL_I32 HL_I32 HL_STRUCT HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_om_set_render_targets, _RES HL_I32 HL_BYTES HL_I32 HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, command_list_om_set_stencil_ref, _RES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_rs_set_viewports, _RES HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_rs_set_scissor_rects, _RES HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, command_list_execute_indirect, _RES _RES HL_I32 _RES HL_I64 _RES HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_begin_query, _RES _RES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_end_query, _RES _RES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_resolve_query_data, _RES _RES HL_I32 HL_I32 HL_I32 _RES HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_predication, _RES _RES HL_I64 HL_I32);
 
-DEFINE_PRIM(_VOID, command_list_set_compute_root_signature, _RES _RES);
-DEFINE_PRIM(_VOID, command_list_set_compute_root32_bit_constants, _RES _I32 _I32 _BYTES _I32);
-DEFINE_PRIM(_VOID, command_list_set_compute_root_constant_buffer_view, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_compute_root_descriptor_table, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_compute_root_shader_resource_view, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_set_compute_root_unordered_access_view, _RES _I32 _I64);
-DEFINE_PRIM(_VOID, command_list_dispatch, _RES _I32 _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_compute_root_signature, _RES _RES);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_compute_root32_bit_constants, _RES HL_I32 HL_I32 HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_compute_root_constant_buffer_view, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_compute_root_descriptor_table, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_compute_root_shader_resource_view, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_set_compute_root_unordered_access_view, _RES HL_I32 HL_I64);
+HL_DEFINE_PRIM(HL_VOID, command_list_dispatch, _RES HL_I32 HL_I32 HL_I32);
 
 //command_list_clear_unordered_access_view_float,
 //command_list_clear_unordered_access_view_uint,
@@ -1080,4 +1081,4 @@ HL_PRIM int HL_NAME(get_constant)(int index) {
 	return gs_constants[index];
 }
 
-DEFINE_PRIM(_I32, get_constant, _I32);
+HL_DEFINE_PRIM(HL_I32, get_constant, HL_I32);

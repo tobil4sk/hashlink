@@ -20,7 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #define HL_NAME(n)	mysql_ ## n
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -78,7 +80,7 @@ static void free_result( result *r ) {
 
 HL_PRIM int HL_NAME(result_get_length)( result *r ) {
 	if( r->r == NULL )
-		return r->nfields;	
+		return r->nfields;
 	return (int)mysql_num_rows(r->r);
 }
 
@@ -105,13 +107,13 @@ HL_PRIM vdynamic *HL_NAME(result_next)( result *r ) {
 	vdynamic *obj = (vdynamic*)hl_alloc_dynobj();
 	vdynamic arg;
 	vdynamic length;
-	vdynamic *pargs[2];	
+	vdynamic *pargs[2];
 	pargs[0] = &arg;
 	pargs[1] = &length;
 	length.t = &hlt_i32;
 	r->current = row;
 	for(i=0;i<r->nfields;i++) {
-		if( row[i] == NULL ) continue;		
+		if( row[i] == NULL ) continue;
 		vdynamic *value = NULL;
 		switch( r->fields_convs[i] ) {
 		case CONV_INT:
@@ -276,7 +278,7 @@ static result *alloc_result( connection *c, MYSQL_RES *r ) {
 	res->current = NULL;
 	res->nfields = num_fields;
 	res->fields_ids = (int*)malloc(sizeof(int)*num_fields);
-	res->fields_convs = (CONV*)malloc(sizeof(CONV)*num_fields);	
+	res->fields_convs = (CONV*)malloc(sizeof(CONV)*num_fields);
 	for(i=0;i<num_fields;i++) {
 		int id;
 		if( strchr(fields[i].name,'(') )
@@ -292,7 +294,7 @@ static result *alloc_result( connection *c, MYSQL_RES *r ) {
 // ---------------------------------------------------------------
 // Connection
 
-HL_PRIM void HL_NAME(close_wrap)( connection *c ) {	
+HL_PRIM void HL_NAME(close_wrap)( connection *c ) {
 	if( c->c ) {
 		mp_close(c->c);
 		c->c = NULL;
@@ -367,23 +369,23 @@ HL_PRIM void HL_NAME(set_conv_funs)( vclosure *fstring, vclosure *fbytes, vclosu
 // ---------------------------------------------------------------
 // Registers
 
-#define _CNX _ABSTRACT(mysql_cnx)
-#define _RESULT _ABSTRACT(mysql_result)
+#define _CNX HL_ABSTRACT(mysql_cnx)
+#define _RESULT HL_ABSTRACT(mysql_result)
 
-DEFINE_PRIM(_CNX, connect_wrap, _OBJ(_BYTES _BYTES _BYTES _BYTES _I32) );
-DEFINE_PRIM(_VOID, close_wrap, _CNX);
-DEFINE_PRIM(_RESULT, request, _CNX _BYTES _I32);
-DEFINE_PRIM(_BOOL, select_db_wrap, _CNX _BYTES);
-DEFINE_PRIM(_BYTES, escape, _CNX _BYTES _I32);
+HL_DEFINE_PRIM(_CNX, connect_wrap, HL_OBJ(HL_BYTES HL_BYTES HL_BYTES HL_BYTES HL_I32) );
+HL_DEFINE_PRIM(HL_VOID, close_wrap, _CNX);
+HL_DEFINE_PRIM(_RESULT, request, _CNX HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, select_db_wrap, _CNX HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, escape, _CNX HL_BYTES HL_I32);
 
-DEFINE_PRIM(_I32, result_get_length, _RESULT);
-DEFINE_PRIM(_I32, result_get_nfields, _RESULT);
-DEFINE_PRIM(_ARR, result_get_fields_names, _RESULT);
-DEFINE_PRIM(_DYN, result_next, _RESULT);
-DEFINE_PRIM(_BYTES, result_get, _RESULT _I32);
-DEFINE_PRIM(_I32, result_get_int, _RESULT _I32);
-DEFINE_PRIM(_F64, result_get_float, _RESULT _I32);
+HL_DEFINE_PRIM(HL_I32, result_get_length, _RESULT);
+HL_DEFINE_PRIM(HL_I32, result_get_nfields, _RESULT);
+HL_DEFINE_PRIM(HL_ARR, result_get_fields_names, _RESULT);
+HL_DEFINE_PRIM(HL_DYN, result_next, _RESULT);
+HL_DEFINE_PRIM(HL_BYTES, result_get, _RESULT HL_I32);
+HL_DEFINE_PRIM(HL_I32, result_get_int, _RESULT HL_I32);
+HL_DEFINE_PRIM(HL_F64, result_get_float, _RESULT HL_I32);
 
-DEFINE_PRIM(_VOID, set_conv_funs, _DYN _DYN _DYN _DYN);
+HL_DEFINE_PRIM(HL_VOID, set_conv_funs, HL_DYN HL_DYN HL_DYN HL_DYN);
 
 /* ************************************************************************ */

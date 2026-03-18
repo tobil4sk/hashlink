@@ -2,7 +2,9 @@
 #define ENABLE_VHACD_IMPLEMENTATION 1
 
 #include <VHACD.h>
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 
 typedef struct {
 	VHACD::IVHACD* pInstance;
@@ -73,10 +75,10 @@ HL_PRIM void HL_NAME(vhacd_release)(vhacd* pVhacd) {
 	delete pVhacd;
 }
 
-#define _VHACD _ABSTRACT(vhacd)
-DEFINE_PRIM(_VHACD, create_vhacd, _NO_ARG);
-DEFINE_PRIM(_BOOL, vhacd_compute, _VHACD _BYTES _I32 _BYTES _I32 _STRUCT);
-DEFINE_PRIM(_I32, vhacd_get_n_convex_hulls, _VHACD);
-DEFINE_PRIM(_BOOL, vhacd_get_convex_hull, _VHACD _I32 _STRUCT);
-DEFINE_PRIM(_VOID, vhacd_clean, _VHACD);
-DEFINE_PRIM(_VOID, vhacd_release, _VHACD);
+#define _VHACD HL_ABSTRACT(vhacd)
+HL_DEFINE_PRIM(_VHACD, create_vhacd, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, vhacd_compute, _VHACD HL_BYTES HL_I32 HL_BYTES HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_I32, vhacd_get_n_convex_hulls, _VHACD);
+HL_DEFINE_PRIM(HL_BOOL, vhacd_get_convex_hull, _VHACD HL_I32 HL_STRUCT);
+HL_DEFINE_PRIM(HL_VOID, vhacd_clean, _VHACD);
+HL_DEFINE_PRIM(HL_VOID, vhacd_release, _VHACD);
