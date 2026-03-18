@@ -19,11 +19,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <hl_ffi.h>
 #include <hlmodule.h>
 
 #ifdef HL_WIN
-#	undef _GUID
 #	include <windows.h>
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #	define dlopen(l,p)		(void*)( (l) ? LoadLibraryA(l) : (HMODULE)&__ImageBase)
@@ -327,7 +328,7 @@ static void null_function() {
 static void append_fields( char **p, hl_type *t );
 
 static void append_type( char **p, hl_type *t ) {
-	*(*p)++ = TYPE_STR[t->kind];
+	*(*p)++ = HL_TYPE_STR[t->kind];
 	switch( t->kind ) {
 	case HFUN:
 		{
