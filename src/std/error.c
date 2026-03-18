@@ -19,8 +19,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
 #include "hlsystem.h"
+#include "libhl_ffi.h"
 
 #include <stdarg.h>
 #include <string.h>
@@ -291,11 +293,11 @@ HL_PRIM HL_NO_OPT void hl_assert() {
 #	pragma optimize( "", on )
 #endif
 
-#define _SYMBOL _ABSTRACT(hl_symbol)
+#define _SYMBOL HL_ABSTRACT(hl_symbol)
 
-DEFINE_PRIM(_ARR,exception_stack,_NO_ARG);
-DEFINE_PRIM(_I32,exception_stack_raw,_ARR);
-DEFINE_PRIM(_I32,call_stack_raw,_ARR);
-DEFINE_PRIM(_VOID,set_error_handler,_FUN(_VOID,_DYN));
-DEFINE_PRIM(_VOID,breakpoint,_NO_ARG);
-DEFINE_PRIM(_BYTES,resolve_symbol, _SYMBOL _BYTES _REF(_I32));
+HL_DEFINE_PRIM(HL_ARR,exception_stack,HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32,exception_stack_raw,HL_ARR);
+HL_DEFINE_PRIM(HL_I32,call_stack_raw,HL_ARR);
+HL_DEFINE_PRIM(HL_VOID,set_error_handler,HL_FUN(HL_VOID,HL_DYN));
+HL_DEFINE_PRIM(HL_VOID,breakpoint,HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES,resolve_symbol, _SYMBOL HL_BYTES HL_REF(HL_I32));

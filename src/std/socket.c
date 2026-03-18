@@ -19,6 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #ifdef _WIN32
 
 #define FD_SETSIZE	65536
@@ -79,6 +80,7 @@
 #endif
 
 #include <hl.h>
+#include "../libhl_ffi.h"
 
 #if defined(HL_WIN) || defined(HL_MAC) || defined(HL_IOS) || defined(HL_TVOS)
 #	define MSG_NOSIGNAL 0
@@ -487,31 +489,31 @@ HL_PRIM bool hl_socket_select( varray *ra, varray *wa, varray *ea, char *tmp, in
 	return true;
 }
 
-#define _SOCK	_ABSTRACT(hl_socket)
-DEFINE_PRIM(_VOID,socket_init,_NO_ARG);
-DEFINE_PRIM(_SOCK,socket_new,_BOOL);
-DEFINE_PRIM(_BOOL,socket_set_broadcast,_SOCK _BOOL);
-DEFINE_PRIM(_VOID,socket_close,_SOCK);
-DEFINE_PRIM(_I32,socket_send_char,_SOCK _I32);
-DEFINE_PRIM(_I32,socket_send,_SOCK _BYTES _I32 _I32 );
-DEFINE_PRIM(_I32,socket_recv,_SOCK _BYTES _I32 _I32 );
-DEFINE_PRIM(_I32,socket_recv_char, _SOCK);
-DEFINE_PRIM(_I32,host_resolve,_BYTES);
-DEFINE_PRIM(_BYTES,host_to_string,_I32);
-DEFINE_PRIM(_BYTES,host_reverse,_I32);
-DEFINE_PRIM(_BYTES,host_local,_NO_ARG);
-DEFINE_PRIM(_BOOL,socket_connect,_SOCK _I32 _I32);
-DEFINE_PRIM(_BOOL,socket_listen,_SOCK _I32);
-DEFINE_PRIM(_BOOL,socket_bind,_SOCK _I32 _I32);
-DEFINE_PRIM(_SOCK,socket_accept,_SOCK);
-DEFINE_PRIM(_BOOL,socket_peer,_SOCK _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_BOOL,socket_host,_SOCK _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_BOOL,socket_set_timeout,_SOCK _F64);
-DEFINE_PRIM(_BOOL,socket_shutdown,_SOCK _BOOL _BOOL);
-DEFINE_PRIM(_BOOL,socket_set_blocking,_SOCK _BOOL);
-DEFINE_PRIM(_BOOL,socket_set_fast_send,_SOCK _BOOL);
+#define _SOCK	HL_ABSTRACT(hl_socket)
+HL_DEFINE_PRIM(HL_VOID,socket_init,HL_NO_ARG);
+HL_DEFINE_PRIM(_SOCK,socket_new,HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL,socket_set_broadcast,_SOCK HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, socket_close, _SOCK);
+HL_DEFINE_PRIM(HL_I32, socket_send_char, _SOCK HL_I32);
+HL_DEFINE_PRIM(HL_I32, socket_send, _SOCK HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_I32, socket_recv, _SOCK HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_I32, socket_recv_char, _SOCK);
+HL_DEFINE_PRIM(HL_I32, host_resolve, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, host_to_string, HL_I32);
+HL_DEFINE_PRIM(HL_BYTES, host_reverse, HL_I32);
+HL_DEFINE_PRIM(HL_BYTES, host_local, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, socket_connect, _SOCK HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, socket_listen, _SOCK HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, socket_bind, _SOCK HL_I32 HL_I32);
+HL_DEFINE_PRIM(_SOCK, socket_accept, _SOCK);
+HL_DEFINE_PRIM(HL_BOOL, socket_peer, _SOCK HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BOOL, socket_host, _SOCK HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_BOOL, socket_set_timeout, _SOCK HL_F64);
+HL_DEFINE_PRIM(HL_BOOL, socket_shutdown, _SOCK HL_BOOL HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, socket_set_blocking, _SOCK HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, socket_set_fast_send, _SOCK HL_BOOL);
 
-DEFINE_PRIM(_I32, socket_send_to, _SOCK _BYTES _I32 _I32 _I32);
-DEFINE_PRIM(_I32, socket_recv_from, _SOCK _BYTES _I32 _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_I32, socket_fd_size, _I32 );
-DEFINE_PRIM(_BOOL, socket_select, _ARR _ARR _ARR _BYTES _I32 _F64);
+HL_DEFINE_PRIM(HL_I32, socket_send_to, _SOCK HL_BYTES HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_I32, socket_recv_from, _SOCK HL_BYTES HL_I32 HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_I32, socket_fd_size, HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, socket_select, HL_ARR HL_ARR HL_ARR HL_BYTES HL_I32 HL_F64);

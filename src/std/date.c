@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 
 #include <string.h>
 #ifdef HL_CONSOLE
@@ -146,11 +148,11 @@ HL_PRIM void hl_date_get_utc_inf( int date, int *y, int *mo, int *day, int *h, i
 	if( wday ) *wday = t.tm_wday;
 }
 
-DEFINE_PRIM(_I32, date_now, _NO_ARG);
-DEFINE_PRIM(_BYTES, date_to_string, _I32 _REF(_I32));
-DEFINE_PRIM(_F64, date_get_time, _I32);
-DEFINE_PRIM(_I32, date_from_time, _F64);
-DEFINE_PRIM(_I32, date_from_string, _BYTES _I32);
-DEFINE_PRIM(_I32, date_new, _I32 _I32 _I32 _I32 _I32 _I32);
-DEFINE_PRIM(_VOID, date_get_inf, _I32 _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32));
-DEFINE_PRIM(_VOID, date_get_utc_inf, _I32 _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32) _REF(_I32));
+HL_DEFINE_PRIM(HL_I32, date_now, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, date_to_string, HL_I32 HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_F64, date_get_time, HL_I32);
+HL_DEFINE_PRIM(HL_I32, date_from_time, HL_F64);
+HL_DEFINE_PRIM(HL_I32, date_from_string, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_I32, date_new, HL_I32 HL_I32 HL_I32 HL_I32 HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_VOID, date_get_inf, HL_I32 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_VOID, date_get_utc_inf, HL_I32 HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32) HL_REF(HL_I32));

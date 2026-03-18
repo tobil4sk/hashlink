@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #include "hlsystem.h"
 
 #if defined(HL_CONSOLE)
@@ -304,16 +306,16 @@ HL_PRIM void hl_process_kill( vprocess *p ) {
 #	endif
 }
 
-#define _PROCESS _ABSTRACT(hl_process)
+#define _PROCESS HL_ABSTRACT(hl_process)
 
-DEFINE_PRIM( _PROCESS, process_run, _BYTES _ARR _BOOL);
-DEFINE_PRIM( _I32, process_stdout_read, _PROCESS _BYTES _I32 _I32);
-DEFINE_PRIM( _I32, process_stderr_read, _PROCESS _BYTES _I32 _I32);
-DEFINE_PRIM( _BOOL, process_stdin_close, _PROCESS);
-DEFINE_PRIM( _I32, process_stdin_write, _PROCESS _BYTES _I32 _I32);
-DEFINE_PRIM( _I32, process_exit, _PROCESS _REF(_BOOL));
-DEFINE_PRIM( _I32, process_pid, _PROCESS);
-DEFINE_PRIM( _VOID, process_close, _PROCESS);
-DEFINE_PRIM( _VOID, process_kill, _PROCESS);
+HL_DEFINE_PRIM( _PROCESS, process_run, HL_BYTES HL_ARR HL_BOOL);
+HL_DEFINE_PRIM( HL_I32, process_stdout_read, _PROCESS HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM( HL_I32, process_stderr_read, _PROCESS HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM( HL_BOOL, process_stdin_close, _PROCESS);
+HL_DEFINE_PRIM( HL_I32, process_stdin_write, _PROCESS HL_BYTES HL_I32 HL_I32);
+HL_DEFINE_PRIM( HL_I32, process_exit, _PROCESS HL_REF(HL_BOOL));
+HL_DEFINE_PRIM( HL_I32, process_pid, _PROCESS);
+HL_DEFINE_PRIM( HL_VOID, process_close, _PROCESS);
+HL_DEFINE_PRIM( HL_VOID, process_kill, _PROCESS);
 
 /* ************************************************************************ */

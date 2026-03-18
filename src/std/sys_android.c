@@ -20,7 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 
 #if defined(HL_MOBILE) && defined(HL_ANDROID)
 
@@ -237,6 +239,6 @@ const char *hl_sys_special( const char *key ) {
 	return NULL;
 }
 
-DEFINE_PRIM(_BYTES, sys_special, _BYTES);
+HL_DEFINE_PRIM(HL_BYTES, sys_special, HL_BYTES);
 
 #endif

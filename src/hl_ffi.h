@@ -53,7 +53,9 @@
 #	endif
 #endif
 
-#define HL_DEFINE_PRIM(t,name,args) HL_DEFINE_PRIM_WITH_NAME(t,name,args,name)
+#ifndef HL_DEFINE_PRIM
+#	define HL_DEFINE_PRIM(t,name,args) HL_DEFINE_PRIM_WITH_NAME(t,name,args,name)
+#endif
 
 #ifdef HL_NAME
 #	define HL_PRIM					HL_EXTERN_C HL_EXPORT

@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 
 #include <pcre2.h>
 
@@ -123,8 +125,8 @@ HL_PRIM bool hl_regexp_match( ereg *e, vbyte *s, int pos, int len ) {
 	return false;
 }
 
-#define _EREG _ABSTRACT(ereg)
-DEFINE_PRIM( _EREG, regexp_new_options, _BYTES _BYTES);
-DEFINE_PRIM( _I32, regexp_matched_pos, _EREG _I32 _REF(_I32));
-DEFINE_PRIM( _I32, regexp_matched_num, _EREG );
-DEFINE_PRIM( _BOOL, regexp_match, _EREG _BYTES _I32 _I32);
+#define _EREG HL_ABSTRACT(ereg)
+HL_DEFINE_PRIM( _EREG, regexp_new_options, HL_BYTES HL_BYTES);
+HL_DEFINE_PRIM( HL_I32, regexp_matched_pos, _EREG HL_I32 HL_REF(HL_I32));
+HL_DEFINE_PRIM( HL_I32, regexp_matched_num, _EREG );
+HL_DEFINE_PRIM( HL_BOOL, regexp_match, _EREG HL_BYTES HL_I32 HL_I32);

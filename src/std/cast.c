@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #include <math.h>
 
 #define TK2(a,b)		((a) | ((b)<<5))
@@ -593,9 +595,9 @@ HL_PRIM int64 hl_value_address( vdynamic *v ) {
 	return (int64)(int_val)(v && !hl_is_dynamic(v->t) ? v->v.ptr : v);
 }
 
-DEFINE_PRIM(_I32, dyn_compare, _DYN _DYN);
-DEFINE_PRIM(_DYN, value_cast, _DYN _TYPE);
-DEFINE_PRIM(_BOOL, type_safe_cast, _TYPE _TYPE);
-DEFINE_PRIM(_DYN, dyn_op, _I32 _DYN _DYN);
-DEFINE_PRIM(_I32, ptr_compare, _DYN _DYN);
-DEFINE_PRIM(_I64, value_address, _DYN);
+HL_DEFINE_PRIM(HL_I32, dyn_compare, HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, value_cast, HL_DYN HL_TYPE);
+HL_DEFINE_PRIM(HL_BOOL, type_safe_cast, HL_TYPE HL_TYPE);
+HL_DEFINE_PRIM(HL_DYN, dyn_op, HL_I32 HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_I32, ptr_compare, HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_I64, value_address, HL_DYN);

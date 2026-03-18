@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #include "hlsystem.h"
 
 HL_PRIM hl_type hlt_array = { HARRAY };
@@ -656,20 +658,20 @@ HL_PRIM int hl_type_data_size( hl_type *t ) {
 	}
 }
 
-DEFINE_PRIM(_BYTES, type_str, _TYPE);
-DEFINE_PRIM(_BYTES, type_name, _TYPE);
-DEFINE_PRIM(_I32, type_args_count, _TYPE);
-DEFINE_PRIM(_ARR, type_instance_fields, _TYPE);
-DEFINE_PRIM(_TYPE, type_super, _TYPE);
-DEFINE_PRIM(_DYN, type_get_global, _TYPE);
-DEFINE_PRIM(_ARR, type_enum_fields, _TYPE);
-DEFINE_PRIM(_ARR, type_enum_values, _TYPE);
-DEFINE_PRIM(_BOOL, type_enum_eq, _DYN _DYN);
-DEFINE_PRIM(_DYN, alloc_enum_dyn, _TYPE _I32 _ARR _I32);
-DEFINE_PRIM(_ARR, enum_parameters, _DYN);
-DEFINE_PRIM(_BOOL, type_set_global, _TYPE _DYN);
-DEFINE_PRIM(_VOID, register_guid_name, _I64 _BYTES);
-DEFINE_PRIM(_I32, type_data_size, _TYPE);
+HL_DEFINE_PRIM(HL_BYTES, type_str, HL_TYPE);
+HL_DEFINE_PRIM(HL_BYTES, type_name, HL_TYPE);
+HL_DEFINE_PRIM(HL_I32, type_args_count, HL_TYPE);
+HL_DEFINE_PRIM(HL_ARR, type_instance_fields, HL_TYPE);
+HL_DEFINE_PRIM(HL_TYPE, type_super, HL_TYPE);
+HL_DEFINE_PRIM(HL_DYN, type_get_global, HL_TYPE);
+HL_DEFINE_PRIM(HL_ARR, type_enum_fields, HL_TYPE);
+HL_DEFINE_PRIM(HL_ARR, type_enum_values, HL_TYPE);
+HL_DEFINE_PRIM(HL_BOOL, type_enum_eq, HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, alloc_enum_dyn, HL_TYPE HL_I32 HL_ARR HL_I32);
+HL_DEFINE_PRIM(HL_ARR, enum_parameters, HL_DYN);
+HL_DEFINE_PRIM(HL_BOOL, type_set_global, HL_TYPE HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, register_guid_name, HL_I64 HL_BYTES);
+HL_DEFINE_PRIM(HL_I32, type_data_size, HL_TYPE);
 
 typedef void hl_mlookup_map;
 extern hl_mlookup_map *hl_mlookup_alloc();
@@ -1024,4 +1026,4 @@ HL_PRIM vdynamic *hl_mem_compact( vdynamic *d, varray *exclude, int flags, int *
 	return (vdynamic*)data;
 }
 
-DEFINE_PRIM(_DYN, mem_compact, _DYN _ARR _I32 _REF(_I32));
+HL_DEFINE_PRIM(HL_DYN, mem_compact, HL_DYN HL_ARR HL_I32 HL_REF(HL_I32));

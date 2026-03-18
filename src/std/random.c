@@ -19,11 +19,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #include <time.h>
 #include <string.h>
 #if defined(HL_WIN_DESKTOP)
-#	undef _GUID
 #	include <windows.h>
 #	include <process.h>
 #elif defined(HL_CONSOLE)
@@ -112,10 +113,10 @@ HL_PRIM double hl_rnd_float( rnd *r ) {
 	return ((hl_rnd_int(r) / big + hl_rnd_int(r)) / big + hl_rnd_int(r)) / big;
 }
 
-#define _RND	_ABSTRACT(hl_random)
+#define _RND	HL_ABSTRACT(hl_random)
 
-DEFINE_PRIM(_RND,rnd_alloc,_NO_ARG);
-DEFINE_PRIM(_RND,rnd_init_system, _NO_ARG);
-DEFINE_PRIM(_VOID,rnd_set_seed, _RND _I32);
-DEFINE_PRIM(_I32,rnd_int, _RND);
-DEFINE_PRIM(_F64,rnd_float, _RND);
+HL_DEFINE_PRIM(_RND,rnd_alloc,HL_NO_ARG);
+HL_DEFINE_PRIM(_RND,rnd_init_system, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID,rnd_set_seed, _RND HL_I32);
+HL_DEFINE_PRIM(HL_I32,rnd_int, _RND);
+HL_DEFINE_PRIM(HL_F64,rnd_float, _RND);

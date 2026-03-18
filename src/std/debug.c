@@ -19,8 +19,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
 #include "hlsystem.h"
+#include "libhl_ffi.h"
 #if defined(HL_LINUX) && (defined(__i386__) || defined(__x86_64__))
 #	include <sys/ptrace.h>
 #	include <sys/wait.h>
@@ -402,14 +404,14 @@ HL_API bool hl_debug_write_register( int pid, int thread, int reg, void *value, 
 #	endif
 }
 
-DEFINE_PRIM(_BOOL, debug_start, _I32);
-DEFINE_PRIM(_VOID, debug_stop, _I32);
-DEFINE_PRIM(_BOOL, debug_breakpoint, _I32);
-DEFINE_PRIM(_BOOL, debug_read, _I32 _BYTES _BYTES _I32);
-DEFINE_PRIM(_BOOL, debug_write, _I32 _BYTES _BYTES _I32);
-DEFINE_PRIM(_BOOL, debug_flush, _I32 _BYTES _I32);
-DEFINE_PRIM(_I32, debug_wait, _I32 _REF(_I32) _I32);
-DEFINE_PRIM(_BOOL, debug_resume, _I32 _I32);
-DEFINE_PRIM(_BYTES, debug_read_register, _I32 _I32 _I32 _BOOL);
-DEFINE_PRIM(_BOOL, debug_write_register, _I32 _I32 _I32 _BYTES _BOOL);
+HL_DEFINE_PRIM(HL_BOOL, debug_start, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, debug_stop, HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, debug_breakpoint, HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, debug_read, HL_I32 HL_BYTES HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, debug_write, HL_I32 HL_BYTES HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, debug_flush, HL_I32 HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_I32, debug_wait, HL_I32 HL_REF(HL_I32) HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, debug_resume, HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_BYTES, debug_read_register, HL_I32 HL_I32 HL_I32 HL_BOOL);
+HL_DEFINE_PRIM(HL_BOOL, debug_write_register, HL_I32 HL_I32 HL_I32 HL_BYTES HL_BOOL);
 

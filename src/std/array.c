@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 
 HL_PRIM varray *hl_alloc_array( hl_type *at, int size ) {
 	if( size == 0 && at->kind == HDYN ) {
@@ -49,10 +51,10 @@ HL_PRIM vbyte *hl_array_bytes( varray *a ) {
 	return hl_aptr(a,vbyte);
 }
 
-DEFINE_PRIM(_ARR,alloc_array,_TYPE _I32);
-DEFINE_PRIM(_VOID,array_blit,_ARR _I32 _ARR _I32 _I32);
-DEFINE_PRIM(_TYPE,array_type,_ARR);
-DEFINE_PRIM(_BYTES,array_bytes,_ARR);
+HL_DEFINE_PRIM(HL_ARR,alloc_array,HL_TYPE HL_I32);
+HL_DEFINE_PRIM(HL_VOID,array_blit,HL_ARR HL_I32 HL_ARR HL_I32 HL_I32);
+HL_DEFINE_PRIM(HL_TYPE,array_type,HL_ARR);
+HL_DEFINE_PRIM(HL_BYTES,array_bytes,HL_ARR);
 
 HL_PRIM void *hl_alloc_carray( hl_type *at, int size ) {
 	if( at->kind != HOBJ && at->kind != HSTRUCT )
@@ -89,6 +91,6 @@ HL_PRIM void hl_carray_blit( void *dst, hl_type *at, int dpos, void *src, int sp
 	memmove( (vbyte*)dst + dpos * size, (vbyte*)src + spos * size, len * size);
 }
 
-#define _CARRAY _ABSTRACT(hl_carray)
-DEFINE_PRIM(_CARRAY,alloc_carray,_TYPE _I32);
-DEFINE_PRIM(_VOID,carray_blit,_CARRAY _TYPE _I32 _CARRAY _I32 _I32);
+#define _CARRAY HL_ABSTRACT(hl_carray)
+HL_DEFINE_PRIM(_CARRAY,alloc_carray,HL_TYPE HL_I32);
+HL_DEFINE_PRIM(HL_VOID,carray_blit,_CARRAY HL_TYPE HL_I32 _CARRAY HL_I32 HL_I32);

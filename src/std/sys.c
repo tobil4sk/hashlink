@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 
 #ifdef HL_CONSOLE
 #	include <posix/posix.h>
@@ -34,7 +36,6 @@
 #include <sys/stat.h>
 
 #if defined(HL_WIN)
-#	undef _GUID
 #	include <windows.h>
 #	include <direct.h>
 #	include <conio.h>
@@ -700,46 +701,46 @@ const char *hl_sys_special( const char *key ) {
 	 hl_error("Unknown sys_special key");
 	 return NULL;
 }
-DEFINE_PRIM(_BYTES, sys_special, _BYTES);
+HL_DEFINE_PRIM(HL_BYTES, sys_special, HL_BYTES);
 #endif
 
-DEFINE_PRIM(_BYTES, sys_hl_file, _NO_ARG);
-DEFINE_PRIM(_BOOL, sys_utf8_path, _NO_ARG);
-DEFINE_PRIM(_BYTES, sys_string, _NO_ARG);
-DEFINE_PRIM(_BYTES, sys_locale, _NO_ARG);
-DEFINE_PRIM(_VOID, sys_print, _BYTES);
-DEFINE_PRIM(_VOID, sys_exit, _I32);
-DEFINE_PRIM(_F64, sys_time, _NO_ARG);
-DEFINE_PRIM(_I64, sys_timestamp_ms, _NO_ARG);
-DEFINE_PRIM(_BYTES, sys_get_env, _BYTES);
-DEFINE_PRIM(_BOOL, sys_put_env, _BYTES _BYTES);
-DEFINE_PRIM(_ARR, sys_env, _NO_ARG);
-DEFINE_PRIM(_VOID, sys_sleep, _F64);
-DEFINE_PRIM(_BOOL, sys_set_time_locale, _BYTES);
-DEFINE_PRIM(_BYTES, sys_get_cwd, _NO_ARG);
-DEFINE_PRIM(_BOOL, sys_set_cwd, _BYTES);
-DEFINE_PRIM(_BOOL, sys_is64, _NO_ARG);
-DEFINE_PRIM(_I32, sys_command, _BYTES);
-DEFINE_PRIM(_BOOL, sys_exists, _BYTES);
-DEFINE_PRIM(_BOOL, sys_delete, _BYTES);
-DEFINE_PRIM(_BOOL, sys_rename, _BYTES _BYTES);
-DEFINE_PRIM(_ARR, sys_stat, _BYTES);
-DEFINE_PRIM(_BOOL, sys_is_dir, _BYTES);
-DEFINE_PRIM(_BOOL, sys_create_dir, _BYTES _I32);
-DEFINE_PRIM(_BOOL, sys_remove_dir, _BYTES);
-DEFINE_PRIM(_F64, sys_cpu_time, _NO_ARG);
-DEFINE_PRIM(_F64, sys_thread_cpu_time, _NO_ARG);
-DEFINE_PRIM(_ARR, sys_read_dir, _BYTES);
-DEFINE_PRIM(_BYTES, sys_full_path, _BYTES);
-DEFINE_PRIM(_BYTES, sys_exe_path, _NO_ARG);
-DEFINE_PRIM(_F64, sys_process_memory, _NO_ARG);
-DEFINE_PRIM(_I32, sys_get_char, _BOOL);
-DEFINE_PRIM(_ARR, sys_args, _NO_ARG);
-DEFINE_PRIM(_I32, sys_getpid, _NO_ARG);
-DEFINE_PRIM(_BOOL, sys_check_reload, _BYTES);
-DEFINE_PRIM(_VOID, sys_profile_event, _I32 _BYTES _I32);
-DEFINE_PRIM(_VOID, sys_vtune_init, _NO_ARG);
-DEFINE_PRIM(_I32, sys_set_flags, _I32);
-DEFINE_PRIM(_BOOL, sys_has_debugger, _NO_ARG);
-DEFINE_PRIM(_BOOL, sys_load_plugin, _BYTES);
-DEFINE_PRIM(_DYN, sys_resolve_type, _TYPE _TYPE);
+HL_DEFINE_PRIM(HL_BYTES, sys_hl_file, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, sys_utf8_path, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, sys_string, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, sys_locale, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, sys_print, HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, sys_exit, HL_I32);
+HL_DEFINE_PRIM(HL_F64, sys_time, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I64, sys_timestamp_ms, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BYTES, sys_get_env, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_put_env, HL_BYTES HL_BYTES);
+HL_DEFINE_PRIM(HL_ARR, sys_env, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, sys_sleep, HL_F64);
+HL_DEFINE_PRIM(HL_BOOL, sys_set_time_locale, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, sys_get_cwd, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, sys_set_cwd, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_is64, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, sys_command, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_exists, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_delete, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_rename, HL_BYTES HL_BYTES);
+HL_DEFINE_PRIM(HL_ARR, sys_stat, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_is_dir, HL_BYTES);
+HL_DEFINE_PRIM(HL_BOOL, sys_create_dir, HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, sys_remove_dir, HL_BYTES);
+HL_DEFINE_PRIM(HL_F64, sys_cpu_time, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_F64, sys_thread_cpu_time, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_ARR, sys_read_dir, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, sys_full_path, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, sys_exe_path, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_F64, sys_process_memory, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, sys_get_char, HL_BOOL);
+HL_DEFINE_PRIM(HL_ARR, sys_args, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, sys_getpid, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, sys_check_reload, HL_BYTES);
+HL_DEFINE_PRIM(HL_VOID, sys_profile_event, HL_I32 HL_BYTES HL_I32);
+HL_DEFINE_PRIM(HL_VOID, sys_vtune_init, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, sys_set_flags, HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, sys_has_debugger, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_BOOL, sys_load_plugin, HL_BYTES);
+HL_DEFINE_PRIM(HL_DYN, sys_resolve_type, HL_TYPE HL_TYPE);

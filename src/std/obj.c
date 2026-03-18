@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include "hl.h"
+#include "libhl_ffi.h"
 #include <string.h>
 
 HL_PRIM hl_field_lookup *hl_lookup_insert( hl_field_lookup *l, int size, int hash, hl_type *t, int index ) {
@@ -1338,14 +1340,14 @@ HL_PRIM vdynamic *hl_get_virtual_value( vdynamic *v ) {
 	return ((vvirtual*)v)->value;
 }
 
-DEFINE_PRIM(_DYN, alloc_obj, _TYPE);
-DEFINE_PRIM(_DYN, obj_get_field, _DYN _I32);
-DEFINE_PRIM(_VOID, obj_set_field, _DYN _I32 _DYN);
-DEFINE_PRIM(_BOOL, obj_has_field, _DYN _I32);
-DEFINE_PRIM(_BOOL, obj_delete_field, _DYN _I32);
-DEFINE_PRIM(_ARR, obj_fields, _DYN);
-DEFINE_PRIM(_DYN, obj_copy, _DYN);
-DEFINE_PRIM(_DYN, get_virtual_value, _DYN);
-DEFINE_PRIM(_I32, hash, _BYTES);
-DEFINE_PRIM(_BYTES, field_name, _I32);
+HL_DEFINE_PRIM(HL_DYN, alloc_obj, HL_TYPE);
+HL_DEFINE_PRIM(HL_DYN, obj_get_field, HL_DYN HL_I32);
+HL_DEFINE_PRIM(HL_VOID, obj_set_field, HL_DYN HL_I32 HL_DYN);
+HL_DEFINE_PRIM(HL_BOOL, obj_has_field, HL_DYN HL_I32);
+HL_DEFINE_PRIM(HL_BOOL, obj_delete_field, HL_DYN HL_I32);
+HL_DEFINE_PRIM(HL_ARR, obj_fields, HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, obj_copy, HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, get_virtual_value, HL_DYN);
+HL_DEFINE_PRIM(HL_I32, hash, HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, field_name, HL_I32);
 

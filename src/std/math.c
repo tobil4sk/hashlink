@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #include <math.h>
 
 #ifndef NAN
@@ -132,24 +134,24 @@ HL_PRIM double hl_math_sqrt( double a ) {
 	return sqrt(a);
 }
 
-DEFINE_PRIM(_F64, nan, _NO_ARG);
-DEFINE_PRIM(_F64, math_abs, _F64);
-DEFINE_PRIM(_BOOL, math_isnan, _F64);
-DEFINE_PRIM(_BOOL, math_isfinite, _F64);
-DEFINE_PRIM(_F64, math_fceil, _F64);
-DEFINE_PRIM(_F64, math_fround, _F64);
-DEFINE_PRIM(_F64, math_ffloor, _F64);
-DEFINE_PRIM(_I32, math_round, _F64);
-DEFINE_PRIM(_I32, math_ceil, _F64);
-DEFINE_PRIM(_I32, math_floor, _F64);
-DEFINE_PRIM(_F64, math_cos, _F64);
-DEFINE_PRIM(_F64, math_sin, _F64);
-DEFINE_PRIM(_F64, math_tan, _F64);
-DEFINE_PRIM(_F64, math_acos, _F64);
-DEFINE_PRIM(_F64, math_asin, _F64);
-DEFINE_PRIM(_F64, math_atan, _F64);
-DEFINE_PRIM(_F64, math_atan2, _F64 _F64);
-DEFINE_PRIM(_F64, math_pow, _F64 _F64);
-DEFINE_PRIM(_F64, math_log, _F64);
-DEFINE_PRIM(_F64, math_exp, _F64);
-DEFINE_PRIM(_F64, math_sqrt, _F64);
+HL_DEFINE_PRIM(HL_F64, nan, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_F64, math_abs, HL_F64);
+HL_DEFINE_PRIM(HL_BOOL, math_isnan, HL_F64);
+HL_DEFINE_PRIM(HL_BOOL, math_isfinite, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_fceil, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_fround, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_ffloor, HL_F64);
+HL_DEFINE_PRIM(HL_I32, math_round, HL_F64);
+HL_DEFINE_PRIM(HL_I32, math_ceil, HL_F64);
+HL_DEFINE_PRIM(HL_I32, math_floor, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_cos, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_sin, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_tan, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_acos, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_asin, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_atan, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_atan2, HL_F64 HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_pow, HL_F64 HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_log, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_exp, HL_F64);
+HL_DEFINE_PRIM(HL_F64, math_sqrt, HL_F64);

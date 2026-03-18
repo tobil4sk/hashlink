@@ -20,7 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #include "hlsystem.h"
 
 typedef struct _hl_semaphore hl_semaphore;
@@ -185,12 +187,12 @@ HL_PRIM void hl_mutex_free( hl_mutex *l ) {
 #	endif
 }
 
-#define _MUTEX _ABSTRACT(hl_mutex)
-DEFINE_PRIM(_MUTEX, mutex_alloc, _BOOL);
-DEFINE_PRIM(_VOID, mutex_acquire, _MUTEX);
-DEFINE_PRIM(_BOOL, mutex_try_acquire, _MUTEX);
-DEFINE_PRIM(_VOID, mutex_release, _MUTEX);
-DEFINE_PRIM(_VOID, mutex_free, _MUTEX);
+#define _MUTEX HL_ABSTRACT(hl_mutex)
+HL_DEFINE_PRIM(_MUTEX, mutex_alloc, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, mutex_acquire, _MUTEX);
+HL_DEFINE_PRIM(HL_BOOL, mutex_try_acquire, _MUTEX);
+HL_DEFINE_PRIM(HL_VOID, mutex_release, _MUTEX);
+HL_DEFINE_PRIM(HL_VOID, mutex_free, _MUTEX);
 
 // ------------------ SEMAPHORE
 
@@ -311,12 +313,12 @@ HL_PRIM void hl_semaphore_free(hl_semaphore *sem) {
 #	endif
 }
 
-#define _SEMAPHORE _ABSTRACT(hl_semaphore)
-DEFINE_PRIM(_SEMAPHORE, semaphore_alloc, _I32);
-DEFINE_PRIM(_VOID, semaphore_acquire, _SEMAPHORE);
-DEFINE_PRIM(_BOOL, semaphore_try_acquire, _SEMAPHORE _NULL(_F64));
-DEFINE_PRIM(_VOID, semaphore_release, _SEMAPHORE);
-DEFINE_PRIM(_VOID, semaphore_free, _SEMAPHORE);
+#define _SEMAPHORE HL_ABSTRACT(hl_semaphore)
+HL_DEFINE_PRIM(_SEMAPHORE, semaphore_alloc, HL_I32);
+HL_DEFINE_PRIM(HL_VOID, semaphore_acquire, _SEMAPHORE);
+HL_DEFINE_PRIM(HL_BOOL, semaphore_try_acquire, _SEMAPHORE HL_NULL(HL_F64));
+HL_DEFINE_PRIM(HL_VOID, semaphore_release, _SEMAPHORE);
+HL_DEFINE_PRIM(HL_VOID, semaphore_free, _SEMAPHORE);
 // ------------------ CONDITION
 
 HL_PRIM hl_condition *hl_condition_alloc() {
@@ -451,15 +453,15 @@ HL_PRIM void hl_condition_free(hl_condition *cond) {
 #	endif
 }
 
-#define _CONDITION _ABSTRACT(hl_condition)
-DEFINE_PRIM(_CONDITION, condition_alloc, _NO_ARG)
-DEFINE_PRIM(_VOID, condition_acquire, _CONDITION)
-DEFINE_PRIM(_BOOL, condition_try_acquire, _CONDITION)
-DEFINE_PRIM(_VOID, condition_release, _CONDITION)
-DEFINE_PRIM(_VOID, condition_wait, _CONDITION)
-DEFINE_PRIM(_BOOL, condition_timed_wait, _CONDITION _F64)
-DEFINE_PRIM(_VOID, condition_signal, _CONDITION)
-DEFINE_PRIM(_VOID, condition_broadcast, _CONDITION)
+#define _CONDITION HL_ABSTRACT(hl_condition)
+HL_DEFINE_PRIM(_CONDITION, condition_alloc, HL_NO_ARG)
+HL_DEFINE_PRIM(HL_VOID, condition_acquire, _CONDITION)
+HL_DEFINE_PRIM(HL_BOOL, condition_try_acquire, _CONDITION)
+HL_DEFINE_PRIM(HL_VOID, condition_release, _CONDITION)
+HL_DEFINE_PRIM(HL_VOID, condition_wait, _CONDITION)
+HL_DEFINE_PRIM(HL_BOOL, condition_timed_wait, _CONDITION HL_F64)
+HL_DEFINE_PRIM(HL_VOID, condition_signal, _CONDITION)
+HL_DEFINE_PRIM(HL_VOID, condition_broadcast, _CONDITION)
 
 // ----------------- THREAD LOCAL
 
@@ -554,10 +556,10 @@ HL_PRIM void *hl_tls_get( hl_tls *l ) {
 #	endif
 }
 
-#define _TLS _ABSTRACT(hl_tls)
-DEFINE_PRIM(_TLS, tls_alloc, _BOOL);
-DEFINE_PRIM(_DYN, tls_get, _TLS);
-DEFINE_PRIM(_VOID, tls_set, _TLS _DYN);
+#define _TLS HL_ABSTRACT(hl_tls)
+HL_DEFINE_PRIM(_TLS, tls_alloc, HL_BOOL);
+HL_DEFINE_PRIM(HL_DYN, tls_get, _TLS);
+HL_DEFINE_PRIM(HL_VOID, tls_set, _TLS HL_DYN);
 
 // ----------------- DEQUE
 
@@ -684,11 +686,11 @@ HL_PRIM vdynamic *hl_deque_pop( hl_deque *q, bool block ) {
 }
 
 
-#define _DEQUE _ABSTRACT(hl_deque)
-DEFINE_PRIM(_DEQUE, deque_alloc, _NO_ARG);
-DEFINE_PRIM(_VOID, deque_add, _DEQUE _DYN);
-DEFINE_PRIM(_VOID, deque_push, _DEQUE _DYN);
-DEFINE_PRIM(_DYN, deque_pop, _DEQUE _BOOL);
+#define _DEQUE HL_ABSTRACT(hl_deque)
+HL_DEFINE_PRIM(_DEQUE, deque_alloc, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, deque_add, _DEQUE HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, deque_push, _DEQUE HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, deque_pop, _DEQUE HL_BOOL);
 
 // ----------------- LOCK
 
@@ -801,10 +803,10 @@ HL_PRIM bool hl_lock_wait( hl_lock *l, vdynamic *timeout ) {
 #	endif
 }
 
-#define _LOCK _ABSTRACT(hl_lock)
-DEFINE_PRIM(_LOCK, lock_create, _NO_ARG);
-DEFINE_PRIM(_VOID, lock_release, _LOCK);
-DEFINE_PRIM(_BOOL, lock_wait, _LOCK _NULL(_F64));
+#define _LOCK HL_ABSTRACT(hl_lock)
+HL_DEFINE_PRIM(_LOCK, lock_create, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, lock_release, _LOCK);
+HL_DEFINE_PRIM(HL_BOOL, lock_wait, _LOCK HL_NULL(HL_F64));
 
 // ----------------- THREAD
 
@@ -1010,11 +1012,11 @@ HL_PRIM vbyte *hl_thread_get_name( hl_thread *t ) {
 }
 
 
-#define _THREAD _ABSTRACT(hl_thread)
-DEFINE_PRIM(_THREAD, thread_current, _NO_ARG);
-DEFINE_PRIM(_THREAD, thread_create, _FUN(_VOID,_NO_ARG));
-DEFINE_PRIM(_VOID, thread_set_name, _THREAD _BYTES);
-DEFINE_PRIM(_BYTES, thread_get_name, _THREAD);
+#define _THREAD HL_ABSTRACT(hl_thread)
+HL_DEFINE_PRIM(_THREAD, thread_current, HL_NO_ARG);
+HL_DEFINE_PRIM(_THREAD, thread_create, HL_FUN(HL_VOID,HL_NO_ARG));
+HL_DEFINE_PRIM(HL_VOID, thread_set_name, _THREAD HL_BYTES);
+HL_DEFINE_PRIM(HL_BYTES, thread_get_name, _THREAD);
 
 // ----------------- ATOMICS
 
@@ -1161,16 +1163,16 @@ HL_PRIM void *hl_atomic_store_ptr(void **a, void *value) {
 #endif
 }
 
-DEFINE_PRIM(_I32, atomic_add32, _REF(_I32) _I32)
-DEFINE_PRIM(_I32, atomic_sub32, _REF(_I32) _I32)
-DEFINE_PRIM(_I32, atomic_and32, _REF(_I32) _I32)
-DEFINE_PRIM(_I32, atomic_or32, _REF(_I32) _I32)
-DEFINE_PRIM(_I32, atomic_xor32, _REF(_I32) _I32)
-DEFINE_PRIM(_I32, atomic_compare_exchange32, _REF(_I32) _I32 _I32)
-DEFINE_PRIM(_DYN, atomic_compare_exchange_ptr, _REF(_DYN) _DYN _DYN)
-DEFINE_PRIM(_I32, atomic_exchange32, _REF(_I32) _I32)
-DEFINE_PRIM(_DYN, atomic_exchange_ptr, _REF(_DYN) _DYN)
-DEFINE_PRIM(_I32, atomic_load32, _REF(_I32))
-DEFINE_PRIM(_DYN, atomic_load_ptr, _REF(_DYN))
-DEFINE_PRIM(_I32, atomic_store32, _REF(_I32) _I32)
-DEFINE_PRIM(_DYN, atomic_store_ptr, _REF(_DYN) _DYN)
+HL_DEFINE_PRIM(HL_I32, atomic_add32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_I32, atomic_sub32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_I32, atomic_and32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_I32, atomic_or32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_I32, atomic_xor32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_I32, atomic_compare_exchange32, HL_REF(HL_I32) HL_I32 HL_I32)
+HL_DEFINE_PRIM(HL_DYN, atomic_compare_exchange_ptr, HL_REF(HL_DYN) HL_DYN HL_DYN)
+HL_DEFINE_PRIM(HL_I32, atomic_exchange32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_DYN, atomic_exchange_ptr, HL_REF(HL_DYN) HL_DYN)
+HL_DEFINE_PRIM(HL_I32, atomic_load32, HL_REF(HL_I32))
+HL_DEFINE_PRIM(HL_DYN, atomic_load_ptr, HL_REF(HL_DYN))
+HL_DEFINE_PRIM(HL_I32, atomic_store32, HL_REF(HL_I32) HL_I32)
+HL_DEFINE_PRIM(HL_DYN, atomic_store_ptr, HL_REF(HL_DYN) HL_DYN)

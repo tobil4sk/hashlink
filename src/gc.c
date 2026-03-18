@@ -19,9 +19,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include "hl.h"
+#include "libhl_ffi.h"
 #ifdef HL_WIN
-#	undef _GUID
 #	include <windows.h>
 #else
 #	include <sys/types.h>
@@ -1530,15 +1531,15 @@ HL_API vdynamic *hl_debug_call( int mode, vdynamic *v ) {
 #	pragma optimize( "", on )
 #endif
 
-DEFINE_PRIM(_VOID, gc_major, _NO_ARG);
-DEFINE_PRIM(_VOID, gc_enable, _BOOL);
-DEFINE_PRIM(_VOID, gc_profile, _BOOL);
-DEFINE_PRIM(_VOID, gc_stats, _REF(_F64) _REF(_F64) _REF(_F64));
-DEFINE_PRIM(_VOID, gc_dump_memory, _BYTES);
-DEFINE_PRIM(_I32, gc_get_live_objects, _TYPE _ARR);
-DEFINE_PRIM(_I32, gc_get_flags, _NO_ARG);
-DEFINE_PRIM(_VOID, gc_set_flags, _I32);
-DEFINE_PRIM(_DYN, debug_call, _I32 _DYN);
-DEFINE_PRIM(_VOID, blocking, _BOOL);
-DEFINE_PRIM(_VOID, gc_safepoint, _NO_ARG);
-DEFINE_PRIM(_VOID, set_thread_flags, _I32 _I32);
+HL_DEFINE_PRIM(HL_VOID, gc_major, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, gc_enable, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, gc_profile, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, gc_stats, HL_REF(HL_F64) HL_REF(HL_F64) HL_REF(HL_F64));
+HL_DEFINE_PRIM(HL_VOID, gc_dump_memory, HL_BYTES);
+HL_DEFINE_PRIM(HL_I32, gc_get_live_objects, HL_TYPE HL_ARR);
+HL_DEFINE_PRIM(HL_I32, gc_get_flags, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, gc_set_flags, HL_I32);
+HL_DEFINE_PRIM(HL_DYN, debug_call, HL_I32 HL_DYN);
+HL_DEFINE_PRIM(HL_VOID, blocking, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, gc_safepoint, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, set_thread_flags, HL_I32 HL_I32);

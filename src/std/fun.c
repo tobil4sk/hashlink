@@ -19,8 +19,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
 #include "hlsystem.h"
+#include "libhl_ffi.h"
 
 static void fun_var_args() {
 	hl_error("Variable fun args was not cast to typed function");
@@ -421,13 +423,13 @@ HL_PRIM bool hl_is_prim_loaded( vdynamic *f ) {
 	return f && f->t->kind == HFUN && ((vclosure*)f)->fun != hl_prim_not_loaded;
 }
 
-DEFINE_PRIM(_DYN, no_closure, _DYN);
-DEFINE_PRIM(_DYN, make_closure, _DYN _DYN);
-DEFINE_PRIM(_DYN, get_closure_value, _DYN);
-DEFINE_PRIM(_BOOL, fun_compare, _DYN _DYN);
-DEFINE_PRIM(_DYN, make_var_args, _FUN(_DYN,_ARR));
-DEFINE_PRIM(_DYN, call_method, _DYN _ARR);
-DEFINE_PRIM(_BOOL, is_prim_loaded, _DYN);
+HL_DEFINE_PRIM(HL_DYN, no_closure, HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, make_closure, HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, get_closure_value, HL_DYN);
+HL_DEFINE_PRIM(HL_BOOL, fun_compare, HL_DYN HL_DYN);
+HL_DEFINE_PRIM(HL_DYN, make_var_args, HL_FUN(HL_DYN,HL_ARR));
+HL_DEFINE_PRIM(HL_DYN, call_method, HL_DYN HL_ARR);
+HL_DEFINE_PRIM(HL_BOOL, is_prim_loaded, HL_DYN);
 
 #if defined(HL_VCC) && !defined(HL_XBO)
 static LONG CALLBACK global_handler( PEXCEPTION_POINTERS inf ) {

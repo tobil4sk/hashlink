@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include "hl.h"
+#include "libhl_ffi.h"
 #include <stdio.h>
 
 static int track_depth = 10;
@@ -287,11 +289,11 @@ HL_PRIM void hl_track_reset() {
 		all_data[i].bcount = 0;
 }
 
-DEFINE_PRIM(_VOID, track_init, _NO_ARG);
-DEFINE_PRIM(_I32, track_count, _REF(_I32));
-DEFINE_PRIM(_I32, track_entry, _I32 _REF(_TYPE) _REF(_I32) _REF(_I32) _ARR);
-DEFINE_PRIM(_VOID, track_lock, _BOOL);
-DEFINE_PRIM(_VOID, track_set_depth, _I32);
-DEFINE_PRIM(_I32, track_get_bits, _BOOL);
-DEFINE_PRIM(_VOID, track_set_bits, _I32 _BOOL);
-DEFINE_PRIM(_VOID, track_reset, _NO_ARG);
+HL_DEFINE_PRIM(HL_VOID, track_init, HL_NO_ARG);
+HL_DEFINE_PRIM(HL_I32, track_count, HL_REF(HL_I32));
+HL_DEFINE_PRIM(HL_I32, track_entry, HL_I32 HL_REF(HL_TYPE) HL_REF(HL_I32) HL_REF(HL_I32) HL_ARR);
+HL_DEFINE_PRIM(HL_VOID, track_lock, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, track_set_depth, HL_I32);
+HL_DEFINE_PRIM(HL_I32, track_get_bits, HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, track_set_bits, HL_I32 HL_BOOL);
+HL_DEFINE_PRIM(HL_VOID, track_reset, HL_NO_ARG);

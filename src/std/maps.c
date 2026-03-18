@@ -19,7 +19,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include "libhl_ffi.h"
 #ifdef HL_VCC
 #	pragma warning(disable:4034) // sizeof(void) == 0
 #endif
@@ -273,46 +275,46 @@ typedef struct {
 
 /// ----------------------------------------------
 
-#define _IMAP _ABSTRACT(hl_int_map)
-DEFINE_PRIM( _IMAP, hialloc, _NO_ARG );
-DEFINE_PRIM( _VOID, hiset, _IMAP _I32 _DYN );
-DEFINE_PRIM( _BOOL, hiexists, _IMAP _I32 );
-DEFINE_PRIM( _DYN, higet, _IMAP _I32 );
-DEFINE_PRIM( _BOOL, hiremove, _IMAP _I32 );
-DEFINE_PRIM( _ARR, hikeys, _IMAP );
-DEFINE_PRIM( _ARR, hivalues, _IMAP );
-DEFINE_PRIM( _VOID, hiclear, _IMAP );
-DEFINE_PRIM( _I32, hisize, _IMAP );
+#define _IMAP HL_ABSTRACT(hl_int_map)
+HL_DEFINE_PRIM( _IMAP, hialloc, HL_NO_ARG );
+HL_DEFINE_PRIM( HL_VOID, hiset, _IMAP HL_I32 HL_DYN );
+HL_DEFINE_PRIM( HL_BOOL, hiexists, _IMAP HL_I32 );
+HL_DEFINE_PRIM( HL_DYN, higet, _IMAP HL_I32 );
+HL_DEFINE_PRIM( HL_BOOL, hiremove, _IMAP HL_I32 );
+HL_DEFINE_PRIM( HL_ARR, hikeys, _IMAP );
+HL_DEFINE_PRIM( HL_ARR, hivalues, _IMAP );
+HL_DEFINE_PRIM( HL_VOID, hiclear, _IMAP );
+HL_DEFINE_PRIM( HL_I32, hisize, _IMAP );
 
-#define _I64MAP _ABSTRACT(hl_int64_map)
-DEFINE_PRIM( _I64MAP, hi64alloc, _NO_ARG );
-DEFINE_PRIM( _VOID, hi64set, _I64MAP _I64 _DYN );
-DEFINE_PRIM( _BOOL, hi64exists, _I64MAP _I64 );
-DEFINE_PRIM( _DYN, hi64get, _I64MAP _I64 );
-DEFINE_PRIM( _BOOL, hi64remove, _I64MAP _I64 );
-DEFINE_PRIM( _ARR, hi64keys, _I64MAP );
-DEFINE_PRIM( _ARR, hi64values, _I64MAP );
-DEFINE_PRIM( _VOID, hi64clear, _I64MAP );
-DEFINE_PRIM( _I32, hi64size, _I64MAP );
+#define _I64MAP HL_ABSTRACT(hl_int64_map)
+HL_DEFINE_PRIM( _I64MAP, hi64alloc, HL_NO_ARG );
+HL_DEFINE_PRIM( HL_VOID, hi64set, _I64MAP HL_I64 HL_DYN );
+HL_DEFINE_PRIM( HL_BOOL, hi64exists, _I64MAP HL_I64 );
+HL_DEFINE_PRIM( HL_DYN, hi64get, _I64MAP HL_I64 );
+HL_DEFINE_PRIM( HL_BOOL, hi64remove, _I64MAP HL_I64 );
+HL_DEFINE_PRIM( HL_ARR, hi64keys, _I64MAP );
+HL_DEFINE_PRIM( HL_ARR, hi64values, _I64MAP );
+HL_DEFINE_PRIM( HL_VOID, hi64clear, _I64MAP );
+HL_DEFINE_PRIM( HL_I32, hi64size, _I64MAP );
 
-#define _BMAP _ABSTRACT(hl_bytes_map)
-DEFINE_PRIM( _BMAP, hballoc, _NO_ARG );
-DEFINE_PRIM( _VOID, hbset, _BMAP _BYTES _DYN );
-DEFINE_PRIM( _BOOL, hbexists, _BMAP _BYTES );
-DEFINE_PRIM( _DYN, hbget, _BMAP _BYTES );
-DEFINE_PRIM( _BOOL, hbremove, _BMAP _BYTES );
-DEFINE_PRIM( _ARR, hbkeys, _BMAP );
-DEFINE_PRIM( _ARR, hbvalues, _BMAP );
-DEFINE_PRIM( _VOID, hbclear, _BMAP );
-DEFINE_PRIM( _I32, hbsize, _BMAP );
+#define _BMAP HL_ABSTRACT(hl_bytes_map)
+HL_DEFINE_PRIM( _BMAP, hballoc, HL_NO_ARG );
+HL_DEFINE_PRIM( HL_VOID, hbset, _BMAP HL_BYTES HL_DYN );
+HL_DEFINE_PRIM( HL_BOOL, hbexists, _BMAP HL_BYTES );
+HL_DEFINE_PRIM( HL_DYN, hbget, _BMAP HL_BYTES );
+HL_DEFINE_PRIM( HL_BOOL, hbremove, _BMAP HL_BYTES );
+HL_DEFINE_PRIM( HL_ARR, hbkeys, _BMAP );
+HL_DEFINE_PRIM( HL_ARR, hbvalues, _BMAP );
+HL_DEFINE_PRIM( HL_VOID, hbclear, _BMAP );
+HL_DEFINE_PRIM( HL_I32, hbsize, _BMAP );
 
-#define _OMAP _ABSTRACT(hl_obj_map)
-DEFINE_PRIM( _OMAP, hoalloc, _NO_ARG );
-DEFINE_PRIM( _VOID, hoset, _OMAP _DYN _DYN );
-DEFINE_PRIM( _BOOL, hoexists, _OMAP _DYN );
-DEFINE_PRIM( _DYN, hoget, _OMAP _DYN );
-DEFINE_PRIM( _BOOL, horemove, _OMAP _DYN );
-DEFINE_PRIM( _ARR, hokeys, _OMAP );
-DEFINE_PRIM( _ARR, hovalues, _OMAP );
-DEFINE_PRIM( _VOID, hoclear, _OMAP );
-DEFINE_PRIM( _I32, hosize, _OMAP );
+#define _OMAP HL_ABSTRACT(hl_obj_map)
+HL_DEFINE_PRIM( _OMAP, hoalloc, HL_NO_ARG );
+HL_DEFINE_PRIM( HL_VOID, hoset, _OMAP HL_DYN HL_DYN );
+HL_DEFINE_PRIM( HL_BOOL, hoexists, _OMAP HL_DYN );
+HL_DEFINE_PRIM( HL_DYN, hoget, _OMAP HL_DYN );
+HL_DEFINE_PRIM( HL_BOOL, horemove, _OMAP HL_DYN );
+HL_DEFINE_PRIM( HL_ARR, hokeys, _OMAP );
+HL_DEFINE_PRIM( HL_ARR, hovalues, _OMAP );
+HL_DEFINE_PRIM( HL_VOID, hoclear, _OMAP );
+HL_DEFINE_PRIM( HL_I32, hosize, _OMAP );
