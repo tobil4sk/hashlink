@@ -137,6 +137,7 @@ RELEASE_NAME=win
 VS_RUNTIME_LIBRARY ?= c:/windows/system32/vcruntime140.dll
 
 ifeq ($(MARCH),32)
+ARCH = x86_32
 CFLAGS += -msse2 -mfpmath=sse
 CC=i686-pc-cygwin-gcc
 BUILD_DIR = Release
@@ -212,6 +213,7 @@ LDFLAGS += -Wl,--no-undefined
 USE_LIBHL_LDFLAGS = -Wl,-rpath,.:'$$ORIGIN':$(INSTALL_LIB_DIR)
 
 ifeq ($(MARCH),32)
+ARCH = x86_32
 CFLAGS += -msse2 -mfpmath=sse
 CPPFLAGS += -I /usr/include/i386-linux-gnu
 fmt_LDFLAGS = -L/opt/libjpeg-turbo/lib
@@ -242,16 +244,21 @@ LIBHL = libhl.$(LIBEXT)
 HL = hl$(EXE_SUFFIX)
 HLC = hlc$(EXE_SUFFIX)
 
-all: $(LIBHL) libs
-ifeq ($(ARCH),arm64)
-	$(warning HashLink vm is not supported on arm64, skipping)
+ifneq ($(filter arm64 x86_32,$(ARCH)),)
+$(warning HashLink vm is not supported on this platform, skipping)
+WITH_VM = 0
 else
+WITH_VM = 1
+endif
+
+all: $(LIBHL) libs
+ifneq ($(WITH_VM),0)
 all: $(HL)
 endif
 
 install:
 	$(UNAME)==Darwin && ${MAKE} uninstall
-ifneq ($(ARCH),arm64)
+ifneq ($(WITH_VM),0)
 	mkdir -p $(INSTALL_BIN_DIR)
 	cp $(HL) $(INSTALL_BIN_DIR)
 endif
@@ -367,11 +374,10 @@ release_win:
 	rm -rf $(PACKAGE_NAME)
 
 release_linux release_osx:
-ifeq ($(ARCH),arm64)
-	cp $(LIBHL) *.hdll $(PACKAGE_NAME)
-else
-	cp $(HL) $(LIBHL) *.hdll $(PACKAGE_NAME)
+ifneq ($(WITH_VM),0)
+	cp $(HL) $(PACKAGE_NAME)
 endif
+	cp $(LIBHL) *.hdll $(PACKAGE_NAME)
 	tar -cvzf $(PACKAGE_NAME).tar.gz $(PACKAGE_NAME)
 	rm -rf $(PACKAGE_NAME)
 
