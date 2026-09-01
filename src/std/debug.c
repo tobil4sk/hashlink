@@ -299,7 +299,7 @@ HL_API bool hl_debug_resume( int pid, int thread ) {
 #	endif
 }
 
-#ifdef HL_WIN
+#if defined(HL_WIN) && defined(HL_64)
 DWORD64 *GetContextReg( CONTEXT *c, int reg ) {
 	switch( reg ) {
 	case 0: return &c->Rsp;
