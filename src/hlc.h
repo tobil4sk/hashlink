@@ -25,6 +25,7 @@
 #include <math.h>
 #define HL_DISABLE_LEGACY_FFI
 #include <hl.h>
+#include <string.h>
 
 #ifdef HLC_BOOT
 
